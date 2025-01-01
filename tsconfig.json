@@ -17,6 +17,6 @@
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "images.d.ts"],
   "exclude": ["node_modules"]
 }

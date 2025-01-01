@@ -27,7 +27,7 @@ export class EXAMPLE_CARD extends LitElement {
   }
 
   static getStubConfig() {
-    return { entity: "sun.sun" }
+    return { entity: "sun.sun" };
   }
 
   setConfig() {

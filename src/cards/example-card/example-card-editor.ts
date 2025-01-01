@@ -4,7 +4,7 @@ import { LitElement, html } from "lit";
 
 @customElement(EXAMPLE_CARD_EDITOR_NAME)
 export class ExampleCardEditor extends LitElement {
-  @state() private _config?
+  @state() private _config?;
 
   static get properties() {
     return {
