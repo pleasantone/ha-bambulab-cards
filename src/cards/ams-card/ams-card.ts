@@ -33,6 +33,7 @@ interface Result {
   spools: Sensor[];
 }
 
+
 @customElement(AMS_CARD_NAME)
 export class AMS_CARD extends LitElement {
   // private property
@@ -69,51 +70,19 @@ export class AMS_CARD extends LitElement {
     if (this._hass) {
       this.hass = this._hass;
     }
+
+
   }
 
   set hass(hass) {
     this._hass = hass;
     this._states = hass.states;
+    this.filterBambuDevices()
 
-    const result: Result = {
-      humidity: null,
-      temperature: null,
-      spools: [],
-    };
-
-    // Loop through all hass entities, and find those that belong to the selected device
-    for (let key in this._hass.entities) {
-      const value = this._hass.entities[key];
-      console.log("Entity Value: ", value);
-      // Check if it's the humidity sensor
-      if (
-        value.device_id === this._deviceId &&
-        value.translation_key === "humidity_index"
-      ) {
-        result.humidity = value;
-      }
-
-      // Check if it's the temperature sensor
-      if (
-        value.device_id === this._deviceId &&
-        value.translation_key === "ams_temp"
-      ) {
-        result.temperature = value;
-      }
-
-      // Check if it's a spool (tray) sensor
-      if (
-        value.device_id === this._deviceId &&
-        value.translation_key.includes("tray")
-      ) {
-        result.spools.push(value);
-      }
-    }
-
-    this._entities = result;
   }
 
   render() {
+    console.log(this._hass)
     // Return image for humidity state
     const humidity = (state) => {
       if (state === "1") return Humidity1;
@@ -128,7 +97,7 @@ export class AMS_CARD extends LitElement {
         <ha-card header="${this._header}">
           <div class="ams-container graphic">
             <img src=${AMSImage} style="display:block;" id="image" />
-            ${this._entities.spools.map(
+            ${this._entities?.spools.map(
               (spool, index) => html`
                 <span
                   class="spool-badge slot-${index + 1}"
@@ -148,7 +117,7 @@ export class AMS_CARD extends LitElement {
                 </span>
               `
             )}
-            ${this._entities.spools.map(
+            ${this._entities?.spools.map(
               (spool, index) => html`
                 <span
                   class="spool-type slot-${index + 1}"
@@ -161,12 +130,12 @@ export class AMS_CARD extends LitElement {
               `
             )}
             <img
-              src=${humidity(this._states[this._entities.humidity.entity_id])}
+              src=${humidity(this._states[this._entities?.humidity.entity_id])}
               class="humidity"
             />
             <span class="ams-temperature"
-              >${this._states[this._entities.temperature.entity_id]?.state}
-              ${this._states[this._entities.temperature.entity_id]?.attributes
+              >${this._states[this._entities?.temperature.entity_id]?.state}
+              ${this._states[this._entities?.temperature.entity_id]?.attributes
                 .unit_of_measurement}</span
             >
           </div>
@@ -177,7 +146,7 @@ export class AMS_CARD extends LitElement {
         <ha-card header="${this._header}">
           <div class="ams-container vector">
             <div class="spools">
-              ${this._entities.spools.map(
+              ${this._entities?.spools.map(
                 (spool) => html`
                   <div
                     class="spool"
@@ -211,7 +180,7 @@ export class AMS_CARD extends LitElement {
               <div>
                 <img
                   src=${humidity(
-                    this._states[this._entities.humidity.entity_id]
+                    this._states[this._entities?.humidity.entity_id]
                   )}
                   class="humidity"
                 />
@@ -235,4 +204,40 @@ export class AMS_CARD extends LitElement {
       style: "graphic",
     };
   }
+
+  private async getEntity(entity_id) {
+    return await this._hass.callWS({
+      type: "config/entity_registry/get",
+      entity_id: entity_id,
+    })
+  }
+
+  private async filterBambuDevices(){
+
+    const result: Result = {
+      humidity: null,
+      temperature: null,
+      spools: [],
+    };
+    // Loop through all hass entities, and find those that belong to the selected device
+    for (let key in this._hass.entities) {
+      const value = this._hass.entities[key];
+      if (value.device_id === this._deviceId) {
+        const r = await this.getEntity(value.entity_id)
+        if (r.unique_id.includes("humidity")){
+          result.humidity = value
+        }
+       else  if (r.unique_id.includes("temp")){
+          result.temperature = value
+        }
+       else if (r.unique_id.includes("tray")){
+          result.spools.push(value);
+        }
+      }
+    }
+
+    this._entities = result;
+  }
+
+
 }
