@@ -2,6 +2,7 @@ import { customElement, state } from "lit/decorators.js";
 import { html, LitElement, nothing } from "lit";
 
 import { registerCustomCard } from "../../utils/custom-cards";
+import {getContrastingTextColor} from "../../utils/helpers"
 import AMSImage from "../../images/ams.png";
 import Humidity1 from "../../images/hum_level1_light.svg";
 import Humidity2 from "../../images/hum_level2_light.svg";
@@ -83,7 +84,7 @@ export class AMS_CARD extends LitElement {
     // Loop through all hass entities, and find those that belong to the selected device
     for (let key in this._hass.entities) {
       const value = this._hass.entities[key];
-
+      console.log("Entity Value: ", value)
       // Check if it's the humidity sensor
       if (
         value.device_id === this._deviceId &&
@@ -155,7 +156,7 @@ export class AMS_CARD extends LitElement {
                 style="border: ${this._states[spool.entity_id]?.attributes
               .active
               ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
-              : `1px solid rgba(0, 0, 0, 0)`}"
+              : `1px solid rgba(0, 0, 0, 0)`};"
                 >${this._states[spool.entity_id]?.attributes.type}</span
               >
             `
@@ -183,7 +184,7 @@ export class AMS_CARD extends LitElement {
                       .active ? `outline: 2px solid ${this._states[spool.entity_id]?.attributes
                         .color}; outline-offset: 2px;` : ``}">
                       <div class="overlay"  style="background-color: ${this._states[spool.entity_id]?.attributes
-                          .color}; height: ${this._states[spool.entity_id]?.attributes.remain}%">
+                          .color}; height: ${this._states[spool.entity_id]?.attributes.remain}%; color: ${getContrastingTextColor(this._states[spool.entity_id]?.attributes.color)}">
                         ${this._states[spool.entity_id]?.attributes.type}
                         </div>
                     </div>

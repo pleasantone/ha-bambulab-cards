@@ -1,5 +1,5 @@
 import { AMS_CARD_EDITOR_NAME, AMS_MODELS } from "./const";
-import { INTEGRATION_DOMAIN } from "../../const";
+import {INTEGRATION_DOMAIN, MANUFACTURER} from "../../const";
 import { customElement, state } from "lit/decorators.js";
 import { LitElement, html, nothing } from "lit";
 
@@ -18,18 +18,20 @@ const SCHEMA = {
 };
 
 const filterCombinations = AMS_MODELS.map((model) => ({
-  integration: INTEGRATION_DOMAIN,
+  manufacturer: MANUFACTURER,
   model: model,
 }));
 
 const NEW_SCHEMA = [
-  { name: "header", selector: { text: {} } },
+  { name: "header", label: "Card Header", selector: { text: {} } },
   {
     name: "ams",
+    label: "AMS",
     selector: { device: { filter: filterCombinations } },
   },
   {
     name: "style",
+    label: "Card Style",
     selector: {
       select: {
         options: [
@@ -74,7 +76,7 @@ export class AmsCardEditor extends LitElement {
           .hass=${this.hass}
           .data=${this._config}
           .schema=${NEW_SCHEMA}
-          .computeLabel=${(schema) => schema.name}
+          .computeLabel=${(schema) => schema.label}
           @value-changed=${this._handleValueChanged}
         ></ha-form>
       </div>
