@@ -28,6 +28,17 @@ const NEW_SCHEMA = [
     name: "ams",
     selector: { device: { filter: filterCombinations } },
   },
+  {
+    name: "style",
+    selector: {
+      select: {
+        options: [
+          { label: "Vector", value: "vector" },
+          { label: "Graphic", value: "graphic" },
+        ]
+      },
+    },
+  },
 ];
 
 @customElement(AMS_CARD_EDITOR_NAME)

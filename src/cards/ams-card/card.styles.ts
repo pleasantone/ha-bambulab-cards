@@ -59,6 +59,39 @@ export default css`
     height: auto;
   }
 
+  .vector {
+    background: #e3e1e1;
+    border-radius: 10px;
+  }
+
+  .vector .spools {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    align-content: center;
+    padding: 25px 0;
+    height: 120px;
+  }
+
+  .vector .spool {
+    width: 18%;
+    height: 100%;
+    background: #f1f1f1;
+    border-radius: 5px;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #969696f2;
+  }
+  
+  .vector .spool .overlay {
+    display: flex;
+    justify-content: center;  /* Horizontally centers the text */
+    align-items: center;
+  }
+
   .ams-container .humidity {
     top: 36%;
     text-align: center;
@@ -128,8 +161,6 @@ export default css`
     position: absolute;
     z-index: 2;
   }
-
-
 
   .error {
     color: red;

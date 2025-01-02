@@ -41,6 +41,7 @@ export class AMS_CARD extends LitElement {
   @state() private _deviceId: any;
   @state() private _entities: any;
   @state() private _states;
+  @state() private _style;
 
   static styles = styles;
 
@@ -50,6 +51,7 @@ export class AMS_CARD extends LitElement {
       _entities: { state: true },
       _deviceId: { state: true },
       _states: { state: true },
+      _style: { state: true },
     };
   }
 
@@ -57,6 +59,12 @@ export class AMS_CARD extends LitElement {
     this._header = config.header === "" ? nothing : config.header;
     this._entities = config._entities;
     this._deviceId = config.ams;
+    this._style = config.style;
+
+    if (!config.ams) {
+      throw new Error("You need to select an AMS");
+    }
+
     if (this._hass) {
       this.hass = this._hass;
     }
@@ -114,54 +122,78 @@ export class AMS_CARD extends LitElement {
       return Humidity5;
     };
 
-    return html`
+
+    if(this._style == "graphic") {
+      return html`
       <ha-card header="${this._header}">
         <div class="ams-container graphic">
           <img src=${AMSImage} style="display:block;" id="image" />
           ${this._entities.spools.map(
-            (spool, index) => html`
+          (spool, index) => html`
               <span
                 class="spool-badge slot-${index + 1}"
                 style="border: ${this._states[spool.entity_id]?.attributes
-                  .active
-                  ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
-                  : `1px solid rgba(0, 0, 0, 0)`}"
+              .active
+              ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
+              : `1px solid rgba(0, 0, 0, 0)`}"
               >
                 <ha-icon
                   icon=${this._states[spool.entity_id]?.state !== "Empty"
-                    ? "mdi:printer-3d-nozzle"
-                    : "mdi:tray"}
+              ? "mdi:printer-3d-nozzle"
+              : "mdi:tray"}
                   style="color: ${this._states[spool.entity_id]?.attributes
-                    .color};"
+              .color};"
                 >
                 </ha-icon>
               </span>
             `
-          )}
-        
+      )}
           ${this._entities.spools.map(
-            (spool, index) => html`
+          (spool, index) => html`
               <span
                 class="spool-type slot-${index + 1}"
                 style="border: ${this._states[spool.entity_id]?.attributes
-                  .active
-                  ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
-                  : `1px solid rgba(0, 0, 0, 0)`}"
+              .active
+              ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
+              : `1px solid rgba(0, 0, 0, 0)`}"
                 >${this._states[spool.entity_id]?.attributes.type}</span
               >
             `
-          )}
+      )}
           <img
-              src=${humidity(this._states[this._entities.humidity.entity_id])}
-              class="humidity"
+            src=${humidity(this._states[this._entities.humidity.entity_id])}
+            class="humidity"
           />
-            <span class="ams-temperature"
-              >${this._states[this._entities.temperature.entity_id]
-                ?.state} ${this._states[this._entities.temperature.entity_id]
-        ?.attributes.unit_of_measurement}</span>
+          <span class="ams-temperature"
+            >${this._states[this._entities.temperature.entity_id]?.state}
+            ${this._states[this._entities.temperature.entity_id]?.attributes
+          .unit_of_measurement}</span
+          >
         </div>
       </ha-card>
     `;
+    } else {
+      return html`
+        <ha-card header="${this._header}">
+          <div class="ams-container vector">
+            <div class="spools">
+              ${this._entities.spools.map(
+                  (spool, index) => html`
+                    <div class="spool" style="${this._states[spool.entity_id]?.attributes
+                      .active ? `outline: 2px solid ${this._states[spool.entity_id]?.attributes
+                        .color}; outline-offset: 2px;` : ``}">
+                      <div class="overlay"  style="background-color: ${this._states[spool.entity_id]?.attributes
+                          .color}; height: ${this._states[spool.entity_id]?.attributes.remain}%">
+                        ${this._states[spool.entity_id]?.attributes.type}
+                        </div>
+                    </div>
+                    `
+              )}
+            </div>
+          </div>
+        </ha-card>
+      `
+    }
   }
 
   public static async getConfigElement() {
@@ -173,6 +205,7 @@ export class AMS_CARD extends LitElement {
     return {
       entity: "",
       header: "AMS Header",
+      style: "graphic"
     };
   }
 }
