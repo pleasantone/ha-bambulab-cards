@@ -2,7 +2,7 @@ import { customElement, state } from "lit/decorators.js";
 import { html, LitElement, nothing } from "lit";
 
 import { registerCustomCard } from "../../utils/custom-cards";
-import {getContrastingTextColor} from "../../utils/helpers"
+import { getContrastingTextColor } from "../../utils/helpers";
 import AMSImage from "../../images/ams.png";
 import Humidity1 from "../../images/hum_level1_light.svg";
 import Humidity2 from "../../images/hum_level2_light.svg";
@@ -84,7 +84,7 @@ export class AMS_CARD extends LitElement {
     // Loop through all hass entities, and find those that belong to the selected device
     for (let key in this._hass.entities) {
       const value = this._hass.entities[key];
-      console.log("Entity Value: ", value)
+      console.log("Entity Value: ", value);
       // Check if it's the humidity sensor
       if (
         value.device_id === this._deviceId &&
@@ -123,77 +123,103 @@ export class AMS_CARD extends LitElement {
       return Humidity5;
     };
 
-
-    if(this._style == "graphic") {
+    if (this._style == "graphic") {
       return html`
-      <ha-card header="${this._header}">
-        <div class="ams-container graphic">
-          <img src=${AMSImage} style="display:block;" id="image" />
-          ${this._entities.spools.map(
-          (spool, index) => html`
-              <span
-                class="spool-badge slot-${index + 1}"
-                style="border: ${this._states[spool.entity_id]?.attributes
-              .active
-              ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
-              : `1px solid rgba(0, 0, 0, 0)`}"
-              >
-                <ha-icon
-                  icon=${this._states[spool.entity_id]?.state !== "Empty"
-              ? "mdi:printer-3d-nozzle"
-              : "mdi:tray"}
-                  style="color: ${this._states[spool.entity_id]?.attributes
-              .color};"
+        <ha-card header="${this._header}">
+          <div class="ams-container graphic">
+            <img src=${AMSImage} style="display:block;" id="image" />
+            ${this._entities.spools.map(
+              (spool, index) => html`
+                <span
+                  class="spool-badge slot-${index + 1}"
+                  style="border: ${this._states[spool.entity_id]?.attributes
+                    .active
+                    ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
+                    : `1px solid rgba(0, 0, 0, 0)`}"
                 >
-                </ha-icon>
-              </span>
-            `
-      )}
-          ${this._entities.spools.map(
-          (spool, index) => html`
-              <span
-                class="spool-type slot-${index + 1}"
-                style="border: ${this._states[spool.entity_id]?.attributes
-              .active
-              ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
-              : `1px solid rgba(0, 0, 0, 0)`};"
-                >${this._states[spool.entity_id]?.attributes.type}</span
-              >
-            `
-      )}
-          <img
-            src=${humidity(this._states[this._entities.humidity.entity_id])}
-            class="humidity"
-          />
-          <span class="ams-temperature"
-            >${this._states[this._entities.temperature.entity_id]?.state}
-            ${this._states[this._entities.temperature.entity_id]?.attributes
-          .unit_of_measurement}</span
-          >
-        </div>
-      </ha-card>
-    `;
+                  <ha-icon
+                    icon=${this._states[spool.entity_id]?.state !== "Empty"
+                      ? "mdi:printer-3d-nozzle"
+                      : "mdi:tray"}
+                    style="color: ${this._states[spool.entity_id]?.attributes
+                      .color};"
+                  >
+                  </ha-icon>
+                </span>
+              `
+            )}
+            ${this._entities.spools.map(
+              (spool, index) => html`
+                <span
+                  class="spool-type slot-${index + 1}"
+                  style="border: ${this._states[spool.entity_id]?.attributes
+                    .active
+                    ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
+                    : `1px solid rgba(0, 0, 0, 0)`};"
+                  >${this._states[spool.entity_id]?.attributes.type}</span
+                >
+              `
+            )}
+            <img
+              src=${humidity(this._states[this._entities.humidity.entity_id])}
+              class="humidity"
+            />
+            <span class="ams-temperature"
+              >${this._states[this._entities.temperature.entity_id]?.state}
+              ${this._states[this._entities.temperature.entity_id]?.attributes
+                .unit_of_measurement}</span
+            >
+          </div>
+        </ha-card>
+      `;
     } else {
       return html`
         <ha-card header="${this._header}">
           <div class="ams-container vector">
             <div class="spools">
               ${this._entities.spools.map(
-                  (spool, index) => html`
-                    <div class="spool" style="${this._states[spool.entity_id]?.attributes
-                      .active ? `outline: 2px solid ${this._states[spool.entity_id]?.attributes
-                        .color}; outline-offset: 2px;` : ``}">
-                      <div class="overlay"  style="background-color: ${this._states[spool.entity_id]?.attributes
-                          .color}; height: ${this._states[spool.entity_id]?.attributes.remain}%; color: ${getContrastingTextColor(this._states[spool.entity_id]?.attributes.color)}">
-                        ${this._states[spool.entity_id]?.attributes.type}
-                        </div>
+                (spool) => html`
+                  <div
+                    class="spool"
+                    style="${this._states[spool.entity_id]?.attributes.active
+                      ? `outline: 2px solid ${
+                          this._states[spool.entity_id]?.attributes.color
+                        }; outline-offset: 2px;`
+                      : ``}"
+                  >
+                    <div
+                      class="overlay"
+                      style="background-color: ${this._states[spool.entity_id]
+                        ?.attributes.color}; height: ${this._states[
+                        spool.entity_id
+                      ]?.attributes.remain}%; color: ${getContrastingTextColor(
+                        this._states[spool.entity_id]?.attributes.color
+                      )}"
+                    >
+                      ${this._states[spool.entity_id]?.attributes.type}
                     </div>
-                    `
+                  </div>
+                `
               )}
+            </div>
+            <div class="sensors">
+              <div>
+                ${this._states[this._entities.temperature.entity_id]?.state}
+                ${this._states[this._entities.temperature.entity_id]?.attributes
+                  .unit_of_measurement}
+              </div>
+              <div>
+                <img
+                  src=${humidity(
+                    this._states[this._entities.humidity.entity_id]
+                  )}
+                  class="humidity"
+                />
+              </div>
             </div>
           </div>
         </ha-card>
-      `
+      `;
     }
   }
 
@@ -206,7 +232,7 @@ export class AMS_CARD extends LitElement {
     return {
       entity: "",
       header: "AMS Header",
-      style: "graphic"
+      style: "graphic",
     };
   }
 }

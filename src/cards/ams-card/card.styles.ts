@@ -85,10 +85,17 @@ export default css`
     overflow: hidden;
     border: 1px solid #969696f2;
   }
-  
+
   .vector .spool .overlay {
     display: flex;
-    justify-content: center;  /* Horizontally centers the text */
+    justify-content: center; /* Horizontally centers the text */
+    align-items: center;
+    border-radius: 5px;
+  }
+
+  .vector .sensors {
+    display: flex;
+    justify-content: center; /* Horizontally centers the text */
     align-items: center;
   }
 
