@@ -33,7 +33,6 @@ interface Result {
   spools: Sensor[];
 }
 
-
 @customElement(AMS_CARD_NAME)
 export class AMS_CARD extends LitElement {
   // private property
@@ -70,19 +69,15 @@ export class AMS_CARD extends LitElement {
     if (this._hass) {
       this.hass = this._hass;
     }
-
-
   }
 
   set hass(hass) {
     this._hass = hass;
     this._states = hass.states;
-    this.filterBambuDevices()
-
+    this.filterBambuDevices();
   }
 
   render() {
-    console.log(this._hass)
     // Return image for humidity state
     const humidity = (state) => {
       if (state === "1") return Humidity1;
@@ -90,6 +85,24 @@ export class AMS_CARD extends LitElement {
       if (state === "3") return Humidity3;
       if (state === "4") return Humidity4;
       return Humidity5;
+    };
+
+    const temperature_sensor = () => {
+      if (this._style === "vector") {
+        if (this._states[this._entities.temperature.entity_id]) {
+          return html` <div>
+            ${this._states[this._entities.temperature.entity_id]?.state}
+            ${this._states[this._entities.temperature.entity_id]?.attributes
+              .unit_of_measurement}
+          </div>`;
+        }
+      } else {
+        return html` <span class="ams-temperature"
+          >${this._states[this._entities?.temperature.entity_id]?.state}
+          ${this._states[this._entities?.temperature.entity_id]?.attributes
+            .unit_of_measurement}</span
+        >`;
+      }
     };
 
     if (this._style == "graphic") {
@@ -133,11 +146,7 @@ export class AMS_CARD extends LitElement {
               src=${humidity(this._states[this._entities?.humidity.entity_id])}
               class="humidity"
             />
-            <span class="ams-temperature"
-              >${this._states[this._entities?.temperature.entity_id]?.state}
-              ${this._states[this._entities?.temperature.entity_id]?.attributes
-                .unit_of_measurement}</span
-            >
+            ${temperature_sensor()}
           </div>
         </ha-card>
       `;
@@ -172,12 +181,7 @@ export class AMS_CARD extends LitElement {
               )}
             </div>
             <div class="sensors">
-              <div>
-                ${this._states[this._entities.temperature.entity_id]?.state}
-                ${this._states[this._entities.temperature.entity_id]?.attributes
-                  .unit_of_measurement}
-              </div>
-              <div>
+              ${temperature_sensor()}
                 <img
                   src=${humidity(
                     this._states[this._entities?.humidity.entity_id]
@@ -209,11 +213,10 @@ export class AMS_CARD extends LitElement {
     return await this._hass.callWS({
       type: "config/entity_registry/get",
       entity_id: entity_id,
-    })
+    });
   }
 
-  private async filterBambuDevices(){
-
+  private async filterBambuDevices() {
     const result: Result = {
       humidity: null,
       temperature: null,
@@ -223,14 +226,12 @@ export class AMS_CARD extends LitElement {
     for (let key in this._hass.entities) {
       const value = this._hass.entities[key];
       if (value.device_id === this._deviceId) {
-        const r = await this.getEntity(value.entity_id)
-        if (r.unique_id.includes("humidity")){
-          result.humidity = value
-        }
-       else  if (r.unique_id.includes("temp")){
-          result.temperature = value
-        }
-       else if (r.unique_id.includes("tray")){
+        const r = await this.getEntity(value.entity_id);
+        if (r.unique_id.includes("humidity")) {
+          result.humidity = value;
+        } else if (r.unique_id.includes("temp")) {
+          result.temperature = value;
+        } else if (r.unique_id.includes("tray")) {
           result.spools.push(value);
         }
       }
@@ -238,6 +239,4 @@ export class AMS_CARD extends LitElement {
 
     this._entities = result;
   }
-
-
 }

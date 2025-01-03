@@ -4,19 +4,6 @@ import { customElement, state } from "lit/decorators.js";
 import { LitElement, html, nothing } from "lit";
 
 // https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
-const SCHEMA = {
-  selector: {
-    select: {
-      options: [
-        { label: "AMS 1", value: "ams-1" },
-        { label: "AMS 2", value: "ams-2" },
-        { label: "AMS 3", value: "ams-3" },
-      ],
-      mode: "dropdown",
-    },
-  },
-};
-
 const filterCombinations = AMS_MODELS.map((model) => ({
   manufacturer: MANUFACTURER,
   model: model,
@@ -69,7 +56,6 @@ export class AmsCardEditor extends LitElement {
   }
 
   render() {
-    console.log(this._config);
     return html`
       <div>
         <ha-form
