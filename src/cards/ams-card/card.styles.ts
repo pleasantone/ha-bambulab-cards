@@ -212,78 +212,18 @@ export default css`
     width: 20%;
     display: flex;
     position: relative;
+    min-height: 130px;
   }
-
-  .nv-spool-container {
-    background: #727272;
-    padding: 15% 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
+  
   .nv-spool-info {
     position: absolute;
     z-index: 2;
-    background: red;
+    background: #444444;
     padding: 8%;
     border-radius: 0.5em;
     bottom: -20%;
     left: 50%;
     transform: translateX(-50%);
+    white-space: nowrap;
   }
-
-
-  .nv-spool {
-    background: #232323;
-    width: 15%;
-    min-height: 100px;
-  }
-
-
-  .string-roll {
-    position: relative;
-    width: 90%; /* Width of the roll */
-    min-height: 90px; /* Height of the roll */
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #4160bf;
-    flex-grow: 1;
-  }
-
-  .string-layer {
-    position: absolute;
-    width: 3px; /* Thickness of each vertical string line */
-    height: 100%; /* Full height of the roll */
-    background-color: #304ea8; /* Color of the string */
-  }
-
-  .reflection {
-    width: 100%;
-    height: 100%;
-    animation: lightReflection 3s linear infinite; /* Animation for the moving light reflection */
-  }
-
-  @keyframes lightReflection {
-    0% {
-      background: linear-gradient(to bottom, var(--light-reflection-color-low), var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
-      background-size: 100% 50%;
-      background-position: 0 0;
-    }
-    50% {
-      background: linear-gradient(to bottom, var(--light-reflection-color-low) 0%, var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
-      background-size: 100% 100%;
-      background-position: 0 50%;
-    }
-    100% {
-      background: linear-gradient(to bottom, var(--light-reflection-color-low) 0%, var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
-      background-size: 100% 50%;
-      background-position: 0 100%;
-    }
-  }
-
-
 `;
