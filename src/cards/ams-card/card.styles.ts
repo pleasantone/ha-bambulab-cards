@@ -172,4 +172,118 @@ export default css`
   .error {
     color: red;
   }
+  :root {
+    --light-reflection-color-low: rgba(255, 255, 255, 0);
+    --light-reflection-color-high: rgba(255, 255, 255, 0.2);
+  }
+
+  .nv-wrapper {
+    background: #d6d6d6;
+    border-radius: var(--ha-card-border-radius, 12px);
+  }
+
+  .nv-extra-info {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 2% 0%;
+  }
+
+  .nv-info {
+    background: blue;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    color: white;
+  }
+
+  .nv-ams-container {
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    padding: 0% 2% 5% 2%;
+    /*   padding: 2em 1.5em 1.5em 1.5em; */
+  }
+
+  .nv-spool-holder {
+    border: 0.5rem solid #808080;
+    border-radius: 0.6em;
+    width: 20%;
+    display: flex;
+    position: relative;
+  }
+
+  .nv-spool-container {
+    background: #727272;
+    padding: 15% 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nv-spool-info {
+    position: absolute;
+    z-index: 2;
+    background: red;
+    padding: 8%;
+    border-radius: 0.5em;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+
+  .nv-spool {
+    background: #232323;
+    width: 15%;
+    min-height: 100px;
+  }
+
+
+  .string-roll {
+    position: relative;
+    width: 90%; /* Width of the roll */
+    min-height: 90px; /* Height of the roll */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #4160bf;
+    flex-grow: 1;
+  }
+
+  .string-layer {
+    position: absolute;
+    width: 3px; /* Thickness of each vertical string line */
+    height: 100%; /* Full height of the roll */
+    background-color: #304ea8; /* Color of the string */
+  }
+
+  .reflection {
+    width: 100%;
+    height: 100%;
+    animation: lightReflection 3s linear infinite; /* Animation for the moving light reflection */
+  }
+
+  @keyframes lightReflection {
+    0% {
+      background: linear-gradient(to bottom, var(--light-reflection-color-low), var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
+      background-size: 100% 50%;
+      background-position: 0 0;
+    }
+    50% {
+      background: linear-gradient(to bottom, var(--light-reflection-color-low) 0%, var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
+      background-size: 100% 100%;
+      background-position: 0 50%;
+    }
+    100% {
+      background: linear-gradient(to bottom, var(--light-reflection-color-low) 0%, var(--light-reflection-color-high) 50%, var(--light-reflection-color-low) 100%);
+      background-size: 100% 50%;
+      background-position: 0 100%;
+    }
+  }
+
+
 `;

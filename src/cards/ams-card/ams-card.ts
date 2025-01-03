@@ -33,6 +33,8 @@ interface Result {
   spools: Sensor[];
 }
 
+
+
 @customElement(AMS_CARD_NAME)
 export class AMS_CARD extends LitElement {
   // private property
@@ -42,7 +44,7 @@ export class AMS_CARD extends LitElement {
   @state() private _deviceId: any;
   @state() private _entities: any;
   @state() private _states;
-  @state() private _style;
+  @state() private _style
 
   static styles = styles;
 
@@ -76,6 +78,8 @@ export class AMS_CARD extends LitElement {
     this._states = hass.states;
     this.filterBambuDevices();
   }
+
+
 
   render() {
     // Return image for humidity state
@@ -150,7 +154,7 @@ export class AMS_CARD extends LitElement {
           </div>
         </ha-card>
       `;
-    } else {
+    } else if (this._style == "vector") {
       return html`
         <ha-card header="${this._header}">
           <div class="ams-container vector">
@@ -188,6 +192,67 @@ export class AMS_CARD extends LitElement {
                   )}
                   class="humidity"
                 />
+              </div>
+            </div>
+          </div>
+        </ha-card>
+      `;
+    } else {
+      return html`
+        <ha-card header="${this._header}">
+          <div class="nv-wrapper">
+            <div class="nv-extra-info">
+              <div class="nv-info">Temp</div>
+              <div class="nv-info">Humidity 5 4 3 2 1</div>
+            </div>
+            <div class="nv-ams-container">
+              <div class="nv-spool-holder">
+                <div class="nv-spool-container">
+                  <div class="nv-spool"></div>
+                  <div class="string-roll" id="string-roll">
+                    <div class="reflection"></div>
+                  </div>
+                  <div class="nv-spool"></div>
+                </div>
+                <div class="nv-spool-info">
+                  PLA
+                </div>
+              </div>
+              <div class="nv-spool-holder">
+                <div class="nv-spool-container">
+                  <div class="nv-spool"></div>
+                  <div class="string-roll" id="string-roll">
+                    <div class="reflection"></div>
+                  </div>
+                  <div class="nv-spool"></div>
+                </div>
+                <div class="nv-spool-info">
+                  PLA-CF
+                </div>
+              </div>
+              <div class="nv-spool-holder">
+                <div class="nv-spool-container">
+                  <div class="nv-spool"></div>
+                  <div class="string-roll" id="string-roll">
+                    <div class="reflection"></div>
+                  </div>
+                  <div class="nv-spool"></div>
+                </div>
+                <div class="nv-spool-info">
+                  PETG
+                </div>
+              </div>
+              <div class="nv-spool-holder">
+                <div class="nv-spool-container">
+                  <div class="nv-spool"></div>
+                  <div class="string-roll" id="string-roll">
+                    <div class="reflection"></div>
+                  </div>
+                  <div class="nv-spool"></div>
+                </div>
+                <div class="nv-spool-info">
+                  PLA
+                </div>
               </div>
             </div>
           </div>
@@ -239,4 +304,29 @@ export class AMS_CARD extends LitElement {
 
     this._entities = result;
   }
+
+  private static updateLayers(stringRoll) {
+    const stringWidth = 3; // Width of each vertical string line in pixels
+    const rollWidth = stringRoll.offsetWidth; // Width of the roll container
+
+    // Calculate how many lines can fit
+    const numLayers = Math.floor(rollWidth / (stringWidth * 2)); // Multiply by 2 for the gap
+
+    // Clear previous layers
+    const previousLayers = stringRoll.querySelectorAll(".string-layer");
+    previousLayers.forEach(layer => layer.remove());
+
+    // Add new layers based on the calculated number of layers
+    for (let i = 0; i < numLayers; i++) {
+      const layer = document.createElement("div");
+      layer.classList.add("string-layer");
+
+      // Calculate the left position for each layer based on its index
+      const leftPosition = (i + 1) * (stringWidth * 2) - stringWidth; // Add the gap between lines
+      layer.style.left = `${leftPosition}px`;
+
+      stringRoll.appendChild(layer);
+    }
+  }
+
 }

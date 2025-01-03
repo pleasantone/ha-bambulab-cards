@@ -23,6 +23,7 @@ const NEW_SCHEMA = [
       select: {
         options: [
           { label: "Vector", value: "vector" },
+          { label: "diff", value: "diff" },
           { label: "Graphic", value: "graphic" },
         ],
       },
