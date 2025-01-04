@@ -11,7 +11,8 @@ export class Spool extends LitElement {
   @property({ type: Number }) private maxSpoolHeight: number = 0;
   @property({ type: Number }) private minSpoolHeight: number = 0;
   @property({ type: Number }) private remainHeight: number = 0;
-  @property({ type: Number }) private resizeObserver: null;
+  @property({ type: Number }) private resizeObserver: ResizeObserver | null = null;
+
 
   static styles = styles;
 
@@ -23,7 +24,8 @@ export class Spool extends LitElement {
       this.calculateHeights();
       this.updateLayers();
     });
-    const parent = this.parentElement || this.getRootNode().host;
+    const rootNode = this.getRootNode() as ShadowRoot;
+    const parent = this.parentElement || (rootNode instanceof ShadowRoot ? rootNode.host : null);
     if (parent) {
       this.resizeObserver.observe(parent);
     }
@@ -33,7 +35,7 @@ export class Spool extends LitElement {
     super.disconnectedCallback();
     // Stop observing when the component is removed
     if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
+      this.resizeObserver?.disconnect();
     }
   }
 
@@ -61,7 +63,7 @@ export class Spool extends LitElement {
 
   updateLayers() {
     // Query the #string-roll element inside this component’s shadow DOM
-    const stringRoll = this.renderRoot.getElementById("nv-string-roll");
+    const stringRoll = (this.renderRoot as ShadowRoot).getElementById("nv-string-roll");
     if (!stringRoll) return;
 
     const stringWidth = 2; // matches .string-layer width in CSS
@@ -96,8 +98,9 @@ export class Spool extends LitElement {
       this.remainHeight = 95;
     } else {
       // Get the container's height
-      const container = this.renderRoot.querySelector(".string-roll-container");
-      const containerHeight = container.offsetHeight || 0;
+
+      const container = this.renderRoot.querySelector(".string-roll-container") as HTMLElement | null;
+      const containerHeight = container?.offsetHeight || 0;
 
       // Calculate max spool height (95% of container height)
       this.maxSpoolHeight = containerHeight * 0.95;
