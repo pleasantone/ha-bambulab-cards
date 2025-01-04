@@ -6,6 +6,7 @@ import styles from "./spool.styles";
 export class Spool extends LitElement {
   @property({ type: Boolean }) public active: boolean = false;
   @property() public color;
+  @property() public remaining;
 
   static styles = styles;
 
@@ -20,7 +21,7 @@ export class Spool extends LitElement {
         <div
           class="nv-string-roll"
           id="nv-string-roll"
-          style="background: ${this.color}"
+          style="background: ${this.color}; height: ${this.remaining}%"
         >
           ${this.active ? html`<div class="nv-reflection"></div>` : nothing}
         </div>

@@ -214,7 +214,7 @@ export default css`
     position: relative;
     min-height: 130px;
   }
-  
+
   .nv-spool-info {
     position: absolute;
     z-index: 2;

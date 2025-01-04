@@ -27,7 +27,6 @@ export default css`
   .nv-string-roll {
     position: relative;
     width: 90%; /* Width of the roll */
-    height: 90%; /* Height of the roll */
     overflow: hidden;
     display: flex;
     align-items: center;

@@ -12,6 +12,7 @@ import Humidity5 from "../../images/hum_level5_light.svg";
 import { AMS_CARD_EDITOR_NAME, AMS_CARD_NAME } from "./const";
 import styles from "./card.styles";
 import "./spool.ts";
+import "./vector-ams-card/vector-ams-card"
 
 registerCustomCard({
   type: AMS_CARD_NAME,
@@ -93,8 +94,7 @@ export class AMS_CARD extends LitElement {
         if (this._states[this._entities.temperature.entity_id]) {
           return html` <div>
             ${this._states[this._entities.temperature.entity_id]?.state}
-            ${this._states[this._entities.temperature.entity_id]?.attributes
-              .unit_of_measurement}
+            ${this._states[this._entities.temperature.entity_id]?.attributes.unit_of_measurement}
           </div>`;
         }
       } else {
@@ -106,7 +106,7 @@ export class AMS_CARD extends LitElement {
       }
     };
 
-    console.log(this._states["sensor.x1c_00m00a280103660_ams_1_tray_2"]);
+    console.log(this._states["sensor.x1c_00m00a280103660_ams_1_tray_4"]);
 
     if (this._style == "graphic") {
       return html`
@@ -117,8 +117,7 @@ export class AMS_CARD extends LitElement {
               (spool, index) => html`
                 <span
                   class="spool-badge slot-${index + 1}"
-                  style="border: ${this._states[spool.entity_id]?.attributes
-                    .active
+                  style="border: ${this._states[spool.entity_id]?.attributes.active
                     ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
                     : `1px solid rgba(0, 0, 0, 0)`}"
                 >
@@ -126,8 +125,7 @@ export class AMS_CARD extends LitElement {
                     icon=${this._states[spool.entity_id]?.state !== "Empty"
                       ? "mdi:printer-3d-nozzle"
                       : "mdi:tray"}
-                    style="color: ${this._states[spool.entity_id]?.attributes
-                      .color};"
+                    style="color: ${this._states[spool.entity_id]?.attributes.color};"
                   >
                   </ha-icon>
                 </span>
@@ -137,8 +135,7 @@ export class AMS_CARD extends LitElement {
               (spool, index) => html`
                 <span
                   class="spool-type slot-${index + 1}"
-                  style="border: ${this._states[spool.entity_id]?.attributes
-                    .active
+                  style="border: ${this._states[spool.entity_id]?.attributes.active
                     ? `1px solid ${this._states[spool.entity_id]?.attributes.color}`
                     : `1px solid rgba(0, 0, 0, 0)`};"
                   >${this._states[spool.entity_id]?.attributes.type}</span
@@ -170,10 +167,9 @@ export class AMS_CARD extends LitElement {
                   >
                     <div
                       class="overlay"
-                      style="background-color: ${this._states[spool.entity_id]
-                        ?.attributes.color}; height: ${this._states[
-                        spool.entity_id
-                      ]?.attributes.remain}%; color: ${getContrastingTextColor(
+                      style="background-color: ${this._states[spool.entity_id]?.attributes
+                        .color}; height: ${this._states[spool.entity_id]?.attributes
+                        .remain}%; color: ${getContrastingTextColor(
                         this._states[spool.entity_id]?.attributes.color
                       )}"
                     >
@@ -186,9 +182,7 @@ export class AMS_CARD extends LitElement {
             <div class="sensors">
               ${temperature_sensor()}
                 <img
-                  src=${humidity(
-                    this._states[this._entities?.humidity.entity_id]
-                  )}
+                  src=${humidity(this._states[this._entities?.humidity.entity_id])}
                   class="humidity"
                 />
               </div>
@@ -198,31 +192,7 @@ export class AMS_CARD extends LitElement {
       `;
     } else {
       return html`
-        <ha-card header="${this._header}">
-          <div class="nv-wrapper">
-            <div class="nv-extra-info">
-              <div class="nv-info">Temp</div>
-              <div class="nv-info">Humidity 5 4 3 2 1</div>
-            </div>
-            <div class="nv-ams-container">
-              ${this._entities?.spools.map(
-                (spool) => html`
-                  <div class="nv-spool-holder">
-                    <bl-spool
-                      ?active=${this._states[spool.entity_id]?.attributes
-                        .active}
-                      .color="${this._states[spool.entity_id]?.attributes
-                        .color}"
-                    ></bl-spool>
-                    <div class="nv-spool-info">
-                      ${this._states[spool.entity_id]?.attributes.type}
-                    </div>
-                  </div>
-                `
-              )}
-            </div>
-          </div>
-        </ha-card>
+        <vector-ams-card .header="${this._header}" .entities="${this._entities}" .states="${this._states}"/>
       `;
     }
   }
