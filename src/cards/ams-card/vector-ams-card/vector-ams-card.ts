@@ -26,6 +26,7 @@ export class VectorAmsCard extends LitElement {
                     ?active=${this.states[spool.entity_id]?.attributes.active}
                     .color="${this.states[spool.entity_id]?.attributes.color}"
                     .remaining="${this.states[spool.entity_id]?.attributes.remain}"
+                    .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
                   ></bl-spool>
                   <div class="nv-spool-info">${this.states[spool.entity_id]?.attributes.type}</div>
                 </div>

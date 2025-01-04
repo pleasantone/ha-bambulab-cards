@@ -5,10 +5,37 @@ import styles from "./spool.styles";
 @customElement("bl-spool")
 export class Spool extends LitElement {
   @property({ type: Boolean }) public active: boolean = false;
-  @property() public color;
-  @property() public remaining;
+  @property({ type: String }) public color;
+  @property({ type: String }) public tag_uid;
+  @property({ type: Number }) public remaining;
+  @property({ type: Number }) private maxSpoolHeight: number = 0;
+  @property({ type: Number }) private minSpoolHeight: number = 0;
+  @property({ type: Number }) private remainHeight: number = 0;
+  @property({ type: Number }) private resizeObserver: null;
 
   static styles = styles;
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Start observing the parent element for size changes
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.calculateHeights();
+      this.updateLayers();
+    });
+    const parent = this.parentElement || this.getRootNode().host;
+    if (parent) {
+      this.resizeObserver.observe(parent);
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    // Stop observing when the component is removed
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
 
   firstUpdated() {
     this.updateLayers();
@@ -18,12 +45,14 @@ export class Spool extends LitElement {
     return html`
       <div class="nv-spool-container">
         <div class="nv-spool"></div>
-        <div
-          class="nv-string-roll"
-          id="nv-string-roll"
-          style="background: ${this.color}; height: ${this.remaining}%"
-        >
-          ${this.active ? html`<div class="nv-reflection"></div>` : nothing}
+        <div class="string-roll-container">
+          <div
+            class="nv-string-roll"
+            id="nv-string-roll"
+            style="background: ${this.color}; height: ${this.remainHeight.toFixed(2)}%"
+          >
+            ${this.active ? html`<div class="nv-reflection"></div>` : nothing}
+          </div>
         </div>
         <div class="nv-spool"></div>
       </div>
@@ -55,6 +84,36 @@ export class Spool extends LitElement {
       layer.style.left = `${leftPosition}px`;
 
       stringRoll.appendChild(layer);
+    }
+  }
+
+  calculateHeights() {
+    function isAllZeros(str) {
+      return /^0+$/.test(str);
+    }
+
+    if(isAllZeros(this.tag_uid)) {
+      this.remainHeight = 95;
+    } else {
+      // Get the container's height
+      const container = this.renderRoot.querySelector(".string-roll-container");
+      const containerHeight = container.offsetHeight || 0;
+
+      // Calculate max spool height (95% of container height)
+      this.maxSpoolHeight = containerHeight * 0.95;
+
+      // Calculate min spool height (12% of max spool height)
+      this.minSpoolHeight = this.maxSpoolHeight * 0.12;
+
+      // Calculate remain height based on the remain percentage
+      const remainPercentage = Math.min(Math.max(this.remaining, 0), 100); // Clamp remain to [0, 100]
+      this.remainHeight =
+          this.minSpoolHeight +
+          (this.maxSpoolHeight - this.minSpoolHeight) * (remainPercentage / 100);
+
+      // Ensure remainHeight is within bounds
+      this.remainHeight = Math.min(this.remainHeight, this.maxSpoolHeight);
+      this.requestUpdate();
     }
   }
 }

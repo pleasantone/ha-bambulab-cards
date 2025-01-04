@@ -12,7 +12,7 @@ import Humidity5 from "../../images/hum_level5_light.svg";
 import { AMS_CARD_EDITOR_NAME, AMS_CARD_NAME } from "./const";
 import styles from "./card.styles";
 import "./spool.ts";
-import "./vector-ams-card/vector-ams-card"
+import "./vector-ams-card/vector-ams-card";
 
 registerCustomCard({
   type: AMS_CARD_NAME,
@@ -91,22 +91,24 @@ export class AMS_CARD extends LitElement {
 
     const temperature_sensor = () => {
       if (this._style === "vector") {
-        if (this._states[this._entities.temperature.entity_id]) {
+        if (this._entities.temperature.entity_id) {
           return html` <div>
             ${this._states[this._entities.temperature.entity_id]?.state}
             ${this._states[this._entities.temperature.entity_id]?.attributes.unit_of_measurement}
           </div>`;
-        }
+        } else return html``
       } else {
-        return html` <span class="ams-temperature"
-          >${this._states[this._entities?.temperature.entity_id]?.state}
-          ${this._states[this._entities?.temperature.entity_id]?.attributes
-            .unit_of_measurement}</span
-        >`;
+        if (this._entities.temperature.entity_id) {
+          return html` <span class="ams-temperature"
+            >${this._states[this._entities?.temperature.entity_id]?.state}
+            ${this._states[this._entities?.temperature.entity_id]?.attributes
+              .unit_of_measurement}</span
+          >`;
+        } else return html``
       }
     };
 
-    console.log(this._states["sensor.x1c_00m00a280103660_ams_1_tray_4"]);
+    console.log(this._states["sensor.x1c_00m00a280103660_ams_1_tray_3"]);
 
     if (this._style == "graphic") {
       return html`
@@ -192,7 +194,11 @@ export class AMS_CARD extends LitElement {
       `;
     } else {
       return html`
-        <vector-ams-card .header="${this._header}" .entities="${this._entities}" .states="${this._states}"/>
+        <vector-ams-card
+          .header="${this._header}"
+          .entities="${this._entities}"
+          .states="${this._states}"
+        />
       `;
     }
   }
