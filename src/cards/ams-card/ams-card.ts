@@ -91,7 +91,7 @@ export class AMS_CARD extends LitElement {
 
     const temperature_sensor = () => {
       if (this._style === "vector") {
-        if (this._entities.temperature.entity_id) {
+        if (this._entities.temperature) {
           return html` <div>
             ${this._states[this._entities.temperature.entity_id]?.state}
             ${this._states[this._entities.temperature.entity_id]?.attributes.unit_of_measurement}
