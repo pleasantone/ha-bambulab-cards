@@ -10,13 +10,29 @@ export class VectorAmsCard extends LitElement {
 
   static styles = styles;
 
+  temperature() {
+    if (this.entities.temperature) {
+      return `${this.states[this.entities.temperature.entity_id]?.state} ${this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement}`
+    }
+  }
+
   render() {
     return html`
       <ha-card header="${this.header}">
         <div class="nv-wrapper">
           <div class="nv-extra-info">
-            <div class="nv-info">Temp</div>
-            <div class="nv-info">Humidity 5 4 3 2 1</div>
+            <div class="nv-info">
+              <ha-icon
+                  icon="mdi:water"/>
+            </div>
+            ${this.temperature() ? html`
+                <div class="nv-info">
+                  <span>
+                     <ha-icon icon="mdi:thermometer"/>
+                  </span>
+                  <span>${this.temperature()}</span>
+                </div>
+            ` : nothing}
           </div>
           <div class="nv-ams-container">
             ${this.entities?.spools.map(

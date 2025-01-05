@@ -1,6 +1,7 @@
 import { customElement, property } from "lit/decorators.js";
 import { html, LitElement, nothing } from "lit";
 import styles from "./spool.styles";
+import {getContrastingTextColor} from "../../utils/helpers";
 
 @customElement("bl-spool")
 export class Spool extends LitElement {
@@ -56,7 +57,10 @@ export class Spool extends LitElement {
             style="background: ${this.color}; height: ${this.remainHeight.toFixed(2)}%"
           >
             ${this.active ? html`<div class="nv-reflection"></div>` : nothing}
-            <div class="remaining-percent">${(this.getRemainingValue().type == 'unknown' || this.getRemainingValue().type == 'generic') ? '' : `${this.remaining}%`}</div>
+            <div class="remaining-percent">
+              <p>       ${(this.getRemainingValue().type == 'unknown' || this.getRemainingValue().type == 'generic') ? '' : `${this.remaining}%`}
+              </p>
+            </div>
           </div>
         </div>
         <div class="nv-spool"></div>

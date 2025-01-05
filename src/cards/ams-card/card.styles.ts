@@ -185,16 +185,17 @@ export default css`
   .nv-extra-info {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
-    width: 100%;
-    padding: 2% 0%;
+    justify-content: flex-end;
+    column-gap: 10px;
+    padding: 2% 4%;
   }
 
   .nv-info {
-    background: blue;
+    background: #4f4f4f;
     padding: 0.5em;
     border-radius: 0.5em;
     color: white;
+    font-size: smaller;
   }
 
   .nv-ams-container {
@@ -221,9 +222,11 @@ export default css`
     background: #444444;
     padding: 8%;
     border-radius: 0.5em;
-    bottom: -20%;
+    bottom: -15%;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
+    color: white;
+    font-size: small;
   }
 `;

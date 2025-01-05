@@ -5,16 +5,17 @@ export default css`
     display: block;
     width: 100%;
     box-sizing: border-box;
+    background: #808080;
   }
 
   .nv-spool {
-    background: #232323;
+    background: #3d3d3d;
     width: 15%;
     height: 100%;
   }
 
   .nv-spool-container {
-    background: #686868;
+    background: linear-gradient(#959595, #626262, #959595);
     padding: 15% 0;
     width: 100%;
     display: flex;
@@ -22,6 +23,8 @@ export default css`
     align-items: center;
     height: 100%;
     box-sizing: border-box;
+    border: 2px solid #5a5a5a;
+    border-radius: 3px;
   }
 
   .nv-string-roll {
@@ -97,11 +100,18 @@ export default css`
   .remaining-percent {
     width: 100%;
     height: 100%;
-    color: white;
     z-index: 3;
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: small;
+  }
+  
+  .remaining-percent p {
+    background: #0000008c;
+    padding: 0.2em;
+    border-radius: 0.3em;
+    color: white;
   }
 `;
