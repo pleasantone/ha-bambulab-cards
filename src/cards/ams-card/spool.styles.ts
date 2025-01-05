@@ -41,6 +41,7 @@ export default css`
     width: 2px; /* Thickness of each vertical string line */
     height: 100%; /* Full height of the roll */
     background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
   }
 
   .nv-reflection {
@@ -88,6 +89,17 @@ export default css`
     height: 100%;
     box-sizing: border-box;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .remaining-percent {
+    width: 100%;
+    height: 100%;
+    color: white;
+    z-index: 3;
+    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;

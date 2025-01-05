@@ -43,6 +43,8 @@ export class Spool extends LitElement {
     this.updateLayers();
   }
 
+
+
   render() {
     return html`
       <div class="nv-spool-container">
@@ -54,12 +56,14 @@ export class Spool extends LitElement {
             style="background: ${this.color}; height: ${this.remainHeight.toFixed(2)}%"
           >
             ${this.active ? html`<div class="nv-reflection"></div>` : nothing}
+            <div class="remaining-percent">${(this.getRemainingValue().type == 'unknown' || this.getRemainingValue().type == 'generic') ? '' : `${this.remaining}%`}</div>
           </div>
         </div>
         <div class="nv-spool"></div>
       </div>
     `;
   }
+
 
   updateLayers() {
     // Query the #string-roll element inside this component’s shadow DOM
@@ -89,16 +93,27 @@ export class Spool extends LitElement {
     }
   }
 
-  calculateHeights() {
-    function isAllZeros(str) {
-      return /^0+$/.test(str);
+  getRemainingValue(){
+    if(this.isAllZeros(this.tag_uid)){
+      return {type: "generic", value: 100}
     }
+    else if (this.remaining < 0) {
+      return {type: "unknown", value: 100}
+    }
+    return {type: "bambu", value: this.remaining}
+  }
 
-    if(isAllZeros(this.tag_uid)) {
+  isAllZeros(str) {
+    return /^0+$/.test(str);
+  }
+
+  calculateHeights() {
+    // If not a Bambu Sppol or remaining is less than 0
+    // Less than 0 can represent no filament estimation enabled or bugged MQTT needing a printer restart
+    if(this.getRemainingValue().type === 'generic' || this.getRemainingValue().type === 'unknown') {
       this.remainHeight = 95;
     } else {
       // Get the container's height
-
       const container = this.renderRoot.querySelector(".string-roll-container") as HTMLElement | null;
       const containerHeight = container?.offsetHeight || 0;
 

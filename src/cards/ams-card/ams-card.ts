@@ -98,7 +98,7 @@ export class AMS_CARD extends LitElement {
           </div>`;
         } else return html``
       } else {
-        if (this._entities.temperature.entity_id) {
+        if (this._entities.temperature) {
           return html` <span class="ams-temperature"
             >${this._states[this._entities?.temperature.entity_id]?.state}
             ${this._states[this._entities?.temperature.entity_id]?.attributes
