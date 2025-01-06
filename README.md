@@ -5,11 +5,15 @@
 ![build][build-badge]
 
 
-The Bambu Lab Cards, are a set of pre-made collection of cards for Home Assistant.  Designed to work with the Bambu Lan Home Assistant Integration
+The Bambu Lab Cards, are a set of pre-made collection of cards for Home Assistant.  Designed to work with the Bambu Lab Home Assistant Integration
 
 They are currently a work in progress
 
 ## Installation
+
+### Prerequisites 
+
+- Install the [Bambu Lab Integration](https://github.com/greghesp/ha-bambulab)
 
 ### HACS
 
