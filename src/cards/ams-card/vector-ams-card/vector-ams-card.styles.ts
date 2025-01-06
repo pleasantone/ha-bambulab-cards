@@ -5,12 +5,7 @@ export default css`
     --light-reflection-color-low: rgba(255, 255, 255, 0);
     --light-reflection-color-high: rgba(255, 255, 255, 0.2);
   }
-
-  .v-wrapper {
-    background: #d6d6d6;
-    border-radius: var(--ha-card-border-radius, 12px);
-  }
-
+  
   .v-extra-info {
     display: flex;
     flex-wrap: nowrap;
@@ -37,6 +32,7 @@ export default css`
 
   .v-spool-holder {
     border: 0.5rem solid #808080;
+    background: linear-gradient(#959595, #626262, #959595);
     border-radius: 0.6em;
     width: 20%;
     display: flex;

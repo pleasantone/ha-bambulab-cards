@@ -45,7 +45,8 @@ export class VectorAmsCard extends LitElement {
               (spool) => html`
                 <div class="v-spool-holder" style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes) ? this.states[spool.entity_id]?.attributes.color : '#808080'}">
                   ${this.states[spool.entity_id]?.attributes.type !== "Empty"
-                    ? html` <bl-spool
+                    ? html` 
+                        <bl-spool
                         ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
                         .color="${this.states[spool.entity_id]?.attributes.color}"
                         .remaining="${this.states[spool.entity_id]?.attributes.remain}"

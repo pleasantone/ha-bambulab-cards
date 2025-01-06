@@ -5,7 +5,6 @@ export default css`
     display: block;
     width: 100%;
     box-sizing: border-box;
-    background: #808080;
   }
 
   .v-spool {
@@ -15,7 +14,6 @@ export default css`
   }
 
   .v-spool-container {
-    background: linear-gradient(#959595, #626262, #959595);
     padding: 15% 0;
     width: 100%;
     display: flex;
