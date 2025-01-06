@@ -114,4 +114,34 @@ export default css`
     border-radius: 0.3em;
     color: white;
   }
+
+  @keyframes wiggle{
+    0% {
+      transform: skew(0deg, 0deg);
+    }
+    10% {
+      transform: skew(2deg, 2deg);
+    }
+    20% {
+      transform: skew(0deg, 0deg);
+    }
+    30% {
+      transform: skew(-2deg, -2deg);
+    }
+    40% {
+      transform: skew(0deg, 0deg);
+    }
+    50% {
+      transform: skew(2deg,2deg);
+    }
+    60% {
+      transform: skew(0deg, 0deg);
+    }
+    70% {
+      transform: skew(-2deg, -2deg);
+    }
+    80% {
+      transform: skew(0deg, 0deg);
+    }
+  }
 `;

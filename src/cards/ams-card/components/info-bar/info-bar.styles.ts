@@ -12,6 +12,7 @@ export default css`
 
   .subtitle {
     width: 50%;
+    color: black;
   }
 
   .info-slots {

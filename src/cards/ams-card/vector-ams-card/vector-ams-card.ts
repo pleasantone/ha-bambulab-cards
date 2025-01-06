@@ -26,6 +26,11 @@ export class VectorAmsCard extends LitElement {
     return nothing;
   }
 
+  isActive(attributes){
+    if(attributes?.active || attributes?.in_use) return true;
+    return false;
+  }
+
   render() {
     return html`
       <ha-card header="${this.header}">
@@ -38,10 +43,10 @@ export class VectorAmsCard extends LitElement {
           <div class="v-ams-container">
             ${this.entities?.spools.map(
               (spool) => html`
-                <div class="v-spool-holder">
+                <div class="v-spool-holder" style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes) ? this.states[spool.entity_id]?.attributes.color : '#808080'}">
                   ${this.states[spool.entity_id]?.attributes.type !== "Empty"
                     ? html` <bl-spool
-                        ?active=${this.states[spool.entity_id]?.attributes?.active || this.states[spool.entity_id]?.attributes?.in_use}
+                        ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
                         .color="${this.states[spool.entity_id]?.attributes.color}"
                         .remaining="${this.states[spool.entity_id]?.attributes.remain}"
                         .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"

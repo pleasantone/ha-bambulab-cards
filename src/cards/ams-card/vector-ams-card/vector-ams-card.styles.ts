@@ -43,6 +43,7 @@ export default css`
     position: relative;
     min-height: 130px;
   }
+  
 
   .v-spool-info {
     position: absolute;

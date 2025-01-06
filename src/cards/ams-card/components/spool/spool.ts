@@ -47,7 +47,7 @@ export class Spool extends LitElement {
     return html`
       <div class="v-spool-container">
         <div class="v-spool"></div>
-        <div class="string-roll-container">
+        <div class="string-roll-container" style="animation: ${this.active ? 'wiggle 3s linear infinite' : ''}">
           <div
             class="v-string-roll"
             id="v-string-roll"
