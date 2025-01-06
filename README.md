@@ -1,8 +1,8 @@
 # 🐼 Bambu Lab Cards
 
-[//]: # ([![hacs][hacs-badge]][hacs-url])
-
-[//]: # ([![release][release-badge]][release-url])
+[![hacs][hacs-badge]][hacs-url]
+[![release][release-badge]][release-url]
+![build][build-badge]
 
 
 The Bambu Lab Cards, are a set of pre-made collection of cards for Home Assistant.  Designed to work with the Bambu Lan Home Assistant Integration
@@ -53,3 +53,4 @@ services:
 [hacs-badge]: https://img.shields.io/badge/hacs-default-orange.svg?style=flat-square
 [release-badge]: https://img.shields.io/github/v/release/greghesp/ha-bambulab-cards?style=flat-square
 [release-url]: https://github.com/greghesp/ha-bambulab-cards/releases
+[build-badge]: https://img.shields.io/github/actions/workflow/status/greghesp/ha-bambulab-cards/build.yaml?branch=main&style=flat-square
