@@ -14,7 +14,11 @@ export class VectorAmsCard extends LitElement {
 
   temperature() {
     if (this?.entities?.temperature) {
-      return `${this.states[this.entities.temperature.entity_id]?.state} ${this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement}`;
+      return {
+        value: this.states[this.entities.temperature.entity_id]?.state,
+        unit_of_measurement:
+          this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
+      };
     }
     return nothing;
   }
@@ -26,8 +30,8 @@ export class VectorAmsCard extends LitElement {
     return nothing;
   }
 
-  isActive(attributes){
-    if(attributes?.active || attributes?.in_use) return true;
+  isActive(attributes) {
+    if (attributes?.active || attributes?.in_use) return true;
     return false;
   }
 
@@ -38,15 +42,19 @@ export class VectorAmsCard extends LitElement {
           <info-bar
             subtitle="${this.subtitle}"
             humidity="${this.humidity()}"
-            temperature="${this.temperature()}"
+            .temperature="${this.temperature()}"
           ></info-bar>
           <div class="v-ams-container">
             ${this.entities?.spools.map(
               (spool) => html`
-                <div class="v-spool-holder" style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes) ? this.states[spool.entity_id]?.attributes.color : '#808080'}">
+                <div
+                  class="v-spool-holder"
+                  style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
+                    ? this.states[spool.entity_id]?.attributes.color
+                    : "#808080"}"
+                >
                   ${this.states[spool.entity_id]?.attributes.type !== "Empty"
-                    ? html` 
-                        <bl-spool
+                    ? html` <bl-spool
                         ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
                         .color="${this.states[spool.entity_id]?.attributes.color}"
                         .remaining="${this.states[spool.entity_id]?.attributes.remain}"

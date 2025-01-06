@@ -39,7 +39,8 @@ export class GraphicAmsCard extends LitElement {
               <div class="spool-info">
                 <span
                   class="spool-badge"
-                  style="border: ${this.states[spool.entity_id]?.attributes.active || this.states[spool.entity_id]?.attributes.in_use
+                  style="border: ${this.states[spool.entity_id]?.attributes.active ||
+                  this.states[spool.entity_id]?.attributes.in_use
                     ? `1px solid ${this.states[spool.entity_id]?.attributes.color}`
                     : `1px solid rgba(0, 0, 0, 0)`}"
                 >

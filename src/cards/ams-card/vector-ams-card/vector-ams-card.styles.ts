@@ -5,7 +5,7 @@ export default css`
     --light-reflection-color-low: rgba(255, 255, 255, 0);
     --light-reflection-color-high: rgba(255, 255, 255, 0.2);
   }
-  
+
   .v-extra-info {
     display: flex;
     flex-wrap: nowrap;
@@ -39,7 +39,6 @@ export default css`
     position: relative;
     min-height: 130px;
   }
-  
 
   .v-spool-info {
     position: absolute;

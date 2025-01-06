@@ -128,8 +128,6 @@ export default css`
     color: white;
   }
 
-
-
   .ams-container .spool-type {
     color: white;
     top: 60%;

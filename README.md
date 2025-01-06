@@ -11,7 +11,7 @@ They are currently a work in progress
 
 ## Installation
 
-### Prerequisites 
+### Prerequisites
 
 - Install the [Bambu Lab Integration](https://github.com/greghesp/ha-bambulab)
 
@@ -22,7 +22,6 @@ Bambu Lab Cards are available in [HACS][hacs] (Home Assistant Community Store).
 Use this link to directly go to the repository in HACS
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab-cards)
-
 
 ## Usage
 
@@ -43,7 +42,8 @@ All the cards can be configured using Dashboard UI editor.
 2. Setup a local instance of Home Assistant, I prefer to use Docker for this
 3. Install the [Bambu Lab Integration](https://github.com/greghesp/ha-bambulab)
 4. Setup a docker-compose.yml file with the correct volume binds. My file as an example:
-```yml 
+
+```yml
 version: "3.3"
 services:
   hass:
@@ -60,10 +60,10 @@ services:
 ```
 
 <!-- Badges -->
+
 [hacs-url]: https://github.com/hacs/integration
 [hacs-badge]: https://img.shields.io/badge/hacs-custom-orange.svg?style=flat-square
 [release-badge]: https://img.shields.io/github/v/release/greghesp/ha-bambulab-cards?style=flat-square
 [release-url]: https://github.com/greghesp/ha-bambulab-cards/releases
 [build-badge]: https://img.shields.io/github/actions/workflow/status/greghesp/ha-bambulab-cards/build.yaml?branch=main&style=flat-square
-
 [hacs]: https://hacs.xyz

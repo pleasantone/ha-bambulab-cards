@@ -113,7 +113,7 @@ export default css`
     color: white;
   }
 
-  @keyframes wiggle{
+  @keyframes wiggle {
     0% {
       transform: skew(0deg, 0deg);
     }
@@ -130,7 +130,7 @@ export default css`
       transform: skew(0deg, 0deg);
     }
     50% {
-      transform: skew(2deg,2deg);
+      transform: skew(2deg, 2deg);
     }
     60% {
       transform: skew(0deg, 0deg);
