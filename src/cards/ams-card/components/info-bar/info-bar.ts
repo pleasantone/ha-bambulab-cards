@@ -10,6 +10,23 @@ export class InfoBar extends LitElement {
 
   static styles = styles;
 
+  getHumidityColor() {
+        switch (this.humidity) {
+            case '1':
+                return '#e0f7fa'; // very light blue
+            case '2':
+                return '#81d4fa'; // light blue
+            case '3':
+                return '#29b6f6'; // medium blue
+            case '4':
+                return '#0288d1'; // deeper blue
+            case '5':
+                return '#01579b'; // darkest blue
+            default:
+                return 'white'; // fallback if index is outside 1-5
+        }
+    }
+
   render() {
     return html`
       <div class="extra-info">
@@ -17,7 +34,7 @@ export class InfoBar extends LitElement {
         <div class="info-slots">
           ${this.humidity
             ? html` <div class="info">
-                <span><ha-icon icon="mdi:water" /></span>
+                <span><ha-icon icon="mdi:water" style="color: ${this.getHumidityColor()}" /></span>
                 <span>${this.humidity}</span>
               </div>`
             : nothing}
