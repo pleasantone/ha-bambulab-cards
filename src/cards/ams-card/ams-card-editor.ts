@@ -11,6 +11,7 @@ const filterCombinations = AMS_MODELS.map((model) => ({
 
 const NEW_SCHEMA = [
   { name: "header", label: "Card Header", selector: { text: {} } },
+  { name: "subtitle", label: "Subtitle", selector: { text: {} } },
   {
     name: "ams",
     label: "AMS",
@@ -23,7 +24,6 @@ const NEW_SCHEMA = [
       select: {
         options: [
           { label: "Vector", value: "vector" },
-          { label: "diff", value: "diff" },
           { label: "Graphic", value: "graphic" },
         ],
       },

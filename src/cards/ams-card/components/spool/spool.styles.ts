@@ -8,13 +8,13 @@ export default css`
     background: #808080;
   }
 
-  .nv-spool {
+  .v-spool {
     background: #3d3d3d;
     width: 15%;
     height: 100%;
   }
 
-  .nv-spool-container {
+  .v-spool-container {
     background: linear-gradient(#959595, #626262, #959595);
     padding: 15% 0;
     width: 100%;
@@ -27,7 +27,7 @@ export default css`
     border-radius: 3px;
   }
 
-  .nv-string-roll {
+  .v-string-roll {
     position: relative;
     width: 100%; /* Width of the roll */
     overflow: hidden;
@@ -39,7 +39,7 @@ export default css`
     box-sizing: border-box;
   }
 
-  .nv-string-layer {
+  .v-string-layer {
     position: absolute;
     width: 2px; /* Thickness of each vertical string line */
     height: 100%; /* Full height of the roll */
@@ -47,7 +47,7 @@ export default css`
     z-index: 2;
   }
 
-  .nv-reflection {
+  .v-reflection {
     width: 100%;
     height: 100%;
     animation: lightReflection 3s linear infinite; /* Animation for the moving light reflection */
@@ -96,7 +96,7 @@ export default css`
     align-items: center;
     justify-content: center;
   }
-  
+
   .remaining-percent {
     width: 100%;
     height: 100%;
@@ -107,7 +107,7 @@ export default css`
     justify-content: center;
     font-size: small;
   }
-  
+
   .remaining-percent p {
     background: #0000008c;
     padding: 0.2em;

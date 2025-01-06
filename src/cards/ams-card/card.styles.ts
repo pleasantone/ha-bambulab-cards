@@ -128,33 +128,7 @@ export default css`
     color: white;
   }
 
-  .ams-container .spool-badge {
-    top: 20%;
-    text-align: center;
-    font-size: 1em;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 50px;
-    padding: 8px;
-    pointer-events: none;
-    position: absolute;
-    z-index: 2;
-  }
 
-  .slot-1 {
-    left: 17%;
-  }
-
-  .slot-2 {
-    left: 35.5%;
-  }
-
-  .slot-3 {
-    left: 55.7%;
-  }
-
-  .slot-4 {
-    left: 75.5%;
-  }
 
   .ams-container .spool-type {
     color: white;
@@ -171,62 +145,5 @@ export default css`
 
   .error {
     color: red;
-  }
-  :root {
-    --light-reflection-color-low: rgba(255, 255, 255, 0);
-    --light-reflection-color-high: rgba(255, 255, 255, 0.2);
-  }
-
-  .nv-wrapper {
-    background: #d6d6d6;
-    border-radius: var(--ha-card-border-radius, 12px);
-  }
-
-  .nv-extra-info {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: flex-end;
-    column-gap: 10px;
-    padding: 2% 4%;
-  }
-
-  .nv-info {
-    background: #4f4f4f;
-    padding: 0.5em;
-    border-radius: 0.5em;
-    color: white;
-    font-size: smaller;
-  }
-
-  .nv-ams-container {
-    border-radius: 5px;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-evenly;
-    padding: 0% 2% 5% 2%;
-    /*   padding: 2em 1.5em 1.5em 1.5em; */
-  }
-
-  .nv-spool-holder {
-    border: 0.5rem solid #808080;
-    border-radius: 0.6em;
-    width: 20%;
-    display: flex;
-    position: relative;
-    min-height: 130px;
-  }
-
-  .nv-spool-info {
-    position: absolute;
-    z-index: 2;
-    background: #444444;
-    padding: 8%;
-    border-radius: 0.5em;
-    bottom: -15%;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    color: white;
-    font-size: small;
   }
 `;
