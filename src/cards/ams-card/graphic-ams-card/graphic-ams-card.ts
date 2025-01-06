@@ -13,7 +13,11 @@ export class GraphicAmsCard extends LitElement {
   static styles = styles;
   temperature() {
     if (this?.entities?.temperature) {
-      return `${this.states[this.entities.temperature.entity_id]?.state} ${this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement}`;
+      return {
+        value: this.states[this.entities.temperature.entity_id]?.state,
+        unit_of_measurement:
+        this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
+      };
     }
     return nothing;
   }
@@ -29,7 +33,7 @@ export class GraphicAmsCard extends LitElement {
       <info-bar
         subtitle="${this.subtitle}"
         humidity="${this.humidity()}"
-        temperature="${this.temperature()}"
+        .temperature="${this.temperature()}"
       ></info-bar>
       <div class="ams-container">
         <img src=${AMSImage} alt="" />
