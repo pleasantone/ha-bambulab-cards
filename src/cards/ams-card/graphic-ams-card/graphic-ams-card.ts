@@ -12,13 +12,13 @@ export class GraphicAmsCard extends LitElement {
 
   static styles = styles;
   temperature() {
-    if (this.entities.temperature) {
+    if (this?.entities?.temperature) {
       return `${this.states[this.entities.temperature.entity_id]?.state} ${this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement}`;
     }
     return nothing;
   }
   humidity() {
-    if (this.entities.humidity) {
+    if (this?.entities?.humidity) {
       return this.states[this.entities.humidity.entity_id]?.state;
     }
     return nothing;
@@ -39,7 +39,7 @@ export class GraphicAmsCard extends LitElement {
               <div class="spool-info">
                 <span
                   class="spool-badge"
-                  style="border: ${this.states[spool.entity_id]?.attributes.active
+                  style="border: ${this.states[spool.entity_id]?.attributes.active || this.states[spool.entity_id]?.attributes.in_use
                     ? `1px solid ${this.states[spool.entity_id]?.attributes.color}`
                     : `1px solid rgba(0, 0, 0, 0)`}"
                 >

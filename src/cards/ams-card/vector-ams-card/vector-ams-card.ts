@@ -13,14 +13,14 @@ export class VectorAmsCard extends LitElement {
   static styles = styles;
 
   temperature() {
-    if (this.entities.temperature) {
+    if (this?.entities?.temperature) {
       return `${this.states[this.entities.temperature.entity_id]?.state} ${this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement}`;
     }
     return nothing;
   }
 
   humidity() {
-    if (this.entities.humidity) {
+    if (this?.entities?.humidity) {
       return this.states[this.entities.humidity.entity_id]?.state;
     }
     return nothing;
@@ -41,7 +41,7 @@ export class VectorAmsCard extends LitElement {
                 <div class="v-spool-holder">
                   ${this.states[spool.entity_id]?.attributes.type !== "Empty"
                     ? html` <bl-spool
-                        ?active=${this.states[spool.entity_id]?.attributes.active}
+                        ?active=${this.states[spool.entity_id]?.attributes?.active || this.states[spool.entity_id]?.attributes?.in_use}
                         .color="${this.states[spool.entity_id]?.attributes.color}"
                         .remaining="${this.states[spool.entity_id]?.attributes.remain}"
                         .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
