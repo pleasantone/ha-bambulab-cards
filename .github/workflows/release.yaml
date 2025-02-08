@@ -24,9 +24,11 @@ jobs:
           cache: "npm"
 
       - name: 💿 Install Node dependencies
+        working-directory: "ha-bambulab-cards"
         run: npm ci
 
       - name: 🧵 Build Frontned
+        working-directory: "ha-bambulab-cards"
         run: npm run build
 
       - name: Release
@@ -35,12 +37,12 @@ jobs:
         with:
           draft: true
           generate_release_notes: true
-          files: dist/*.js
+          files: ha-bambulab-cards/dist/*.js
 
       - name: 🛍️ Checkout target repository
         uses: actions/checkout@v3
         with:
-          repository: "greghesp/ha-bambulab" # Replace with target repository
+          repository: "greghesp/ha-bambulab"
           path: "ha-bambulab"
           token: ${{ secrets.PR_TOKEN }}
 
