@@ -23,6 +23,6 @@ If you feel these custom cards are valuable and want to support them in other wa
 
 ## Setup
 
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab-cards)
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=greghesp&repository=ha-bambulab-cards)
 
 For more information on setting up and configuring ha-bambulab, [please read our full documentation](https://docs.page/greghesp/ha-bambulab/installation)
