@@ -57,7 +57,6 @@ export class InfoBar extends LitElement {
   }
 
   render() {
-    console.log(this.temperature);
     return html`
       <div class="extra-info">
         <div class="subtitle">${this.subtitle}</div>
