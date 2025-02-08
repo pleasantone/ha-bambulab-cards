@@ -21,6 +21,7 @@ jobs:
           cache: "npm"
 
       - name: 💿 Install Node dependencies
-        run: |
-          npm ci
-          npm run build
+        run: npm ci
+
+      - name: 🧵 Build Frontend
+        run: npm run build
