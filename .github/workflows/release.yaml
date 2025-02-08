@@ -25,7 +25,9 @@ jobs:
 
       - name: 💿 Install Node dependencies
         working-directory: "ha-bambulab-cards"
-        run: npm ci
+        run: |
+          ls -la
+          npm ci
 
       - name: 🧵 Build Frontned
         working-directory: "ha-bambulab-cards"
