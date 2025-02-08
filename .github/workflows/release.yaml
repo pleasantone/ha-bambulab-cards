@@ -22,11 +22,11 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: "${{ github.workspace }}/ha-bambulab-cards/package-lock.json"
 
       - name: 💿 Install Node dependencies
         working-directory: "ha-bambulab-cards"
         run: |
-          ls -la
           npm ci
 
       - name: 🧵 Build Frontned
@@ -35,7 +35,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+        if: ${{ github.event_name == 'release' }}
         with:
           draft: true
           generate_release_notes: true
@@ -50,8 +50,50 @@ jobs:
 
       - name: 📝 Copy file to target repo
         run: |
-          ls -la
-          cp ha-bambulab-cards/dist/* ha-bambulab/custom_components/bambu_lab/frontend/*
+          cp ha-bambulab-cards/dist/* ha-bambulab/custom_components/bambu_lab/frontend
+
+      - name: 🔄 Update version in const.py
+        run: |
+          # Remove 'v' prefix from tag name
+          # VERSION="${{ github.event.release.tag_name }}"
+          VERSION="v0.3.2"
+          VERSION="${VERSION#v}"
+
+          # Update version in const.py using Python to ensure we only update the correct entry
+          python3 -c "
+          import json
+
+          # Read the file
+          with open('ha-bambulab/custom_components/bambu_lab/const.py', 'r') as f:
+              content = f.read()
+
+          # Find the start and end of the BAMBU_LAB_CARDS array
+          start = content.find('BAMBU_LAB_CARDS = ')
+          if start != -1:
+              # Extract the array portion
+              array_start = content.find('[', start)
+              array_end = content.find(']', array_start) + 1
+              array_str = content[array_start:array_end]
+              
+              # Convert string to valid JSON by replacing single quotes
+              array_str = array_str.replace(\"'\", '\"')
+              
+              # Parse and update the array
+              cards = json.loads(array_str)
+              for card in cards:
+                  if card['filename'] == 'ha-bambulab-cards.js':
+                      card['version'] = '${VERSION}'
+              
+              # Convert back to Python format
+              updated_array = json.dumps(cards, indent=4).replace('\"', \"'\")
+              
+              # Replace in the original content
+              new_content = content[:array_start] + updated_array + content[array_end:]
+              
+              # Write back to file
+              with open('ha-bambulab/custom_components/bambu_lab/const.py', 'w') as f:
+                  f.write(new_content)
+          "
 
       - name: 🔄 Create Pull Request
         uses: peter-evans/create-pull-request@v5
