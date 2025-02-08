@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: 🛍️ Checkout the repo
         uses: actions/checkout@v3.0.2
+        with:
+          path: "ha-bambulab-cards"
 
       - name: 📖 Set up Node
         uses: actions/setup-node@v3
@@ -45,7 +47,7 @@ jobs:
       - name: 📝 Copy file to target repo
         run: |
           ls -la
-          cp dist/* ha-bambulab/custom_components/bambu_lab/frontend/*
+          cp ha-bambulab-cards/dist/* ha-bambulab/custom_components/bambu_lab/frontend/*
 
       - name: 🔄 Create Pull Request
         uses: peter-evans/create-pull-request@v5
