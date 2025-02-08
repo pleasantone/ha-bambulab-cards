@@ -39,10 +39,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: "greghesp/ha-bambulab" # Replace with target repository
+          path: "ha-bambulab"
           token: ${{ secrets.PR_TOKEN }}
 
       - name: 📝 Copy file to target repo
         run: |
+          ls -la
           cp dist/* ha-bambulab/custom_components/bambu_lab/frontend/*
 
       - name: 🔄 Create Pull Request
