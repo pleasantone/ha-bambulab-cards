@@ -149,10 +149,14 @@ export class AMS_CARD extends LitElement {
     if (!this._deviceId) return;
     
     try {
-      const devices = await this._hass.callWS({
-        type: "config/device_registry/list"
-      });
-      const deviceInfo = devices.find(device => device.id === this._deviceId);
+      interface Device {
+        id: string;
+        model?: string;
+      }
+      
+      const deviceInfo = Object.values(this._hass.devices as Record<string, Device>).find(
+        (device: Device) => device.id === this._deviceId
+      );
       return deviceInfo?.model;
     } catch (error) {
       console.error("Error fetching device info:", error);
