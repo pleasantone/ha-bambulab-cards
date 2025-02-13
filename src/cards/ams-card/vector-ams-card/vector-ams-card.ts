@@ -68,10 +68,19 @@ export class VectorAmsCard extends LitElement {
                         .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
                       ></bl-spool>`
                     : nothing}
-                  <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.type}</div>
+                 
                 </div>
               `
             )}
+          </div>
+          <div class="v-spool-info-container">
+             ${this.entities?.spools.map(
+              (spool) => html`
+              <div class="v-spool-info-wrapper">
+                <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.name}</div>
+              </div>
+              `
+             )}
           </div>
         </div>
       </ha-card>
