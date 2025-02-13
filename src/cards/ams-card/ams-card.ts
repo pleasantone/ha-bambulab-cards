@@ -39,7 +39,8 @@ export class AMS_CARD extends LitElement {
   @state() private _entities: any;
   @state() private _states;
   @state() private _style;
-  @state() private _showInfoBar!: boolean | true;
+  @state() private _showInfoBar;
+  @state() private _showType;
 
   static styles = styles;
 
@@ -59,7 +60,8 @@ export class AMS_CARD extends LitElement {
     this._entities = config._entities;
     this._deviceId = config.ams;
     this._style = config.style;
-    this._showInfoBar = config.show_info_bar;
+    this._showInfoBar = config.show_info_bar ? true : false;
+    this._showType = config.show_type ? true : false;
 
     if (!config.ams) {
       throw new Error("You need to select an AMS");
@@ -93,6 +95,7 @@ export class AMS_CARD extends LitElement {
           .entities="${this._entities}"
           .states="${this._states}"
           .showInfoBar=${this._showInfoBar}
+          .showType=${this._showType}
         />
       `;
     }

@@ -30,7 +30,8 @@ export class AmsCardEditor extends LitElement {
           },
         ]
       : ""),
-    {
+      { name: "show_type", label: "Show Filament Types", selector: { boolean: true } }, 
+      {
       name: "ams",
       label: "AMS",
       selector: { device: { filter: filterCombinations } },
@@ -47,7 +48,9 @@ export class AmsCardEditor extends LitElement {
         },
       },
     },
-  ]);
+  ]); 
+
+  
 
   render() {
     const schema = this._schema(this._config.show_info_bar);

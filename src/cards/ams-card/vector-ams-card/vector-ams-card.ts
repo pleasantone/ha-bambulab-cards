@@ -9,6 +9,7 @@ export class VectorAmsCard extends LitElement {
   @property() public showInfoBar;
   @property({ type: Object }) public entities;
   @property({ type: Object }) public states;
+  @property() public showType;
 
   static styles = styles;
 
@@ -73,6 +74,7 @@ export class VectorAmsCard extends LitElement {
               `
             )}
           </div>
+          ${this.showType ? html`
           <div class="v-spool-info-container">
              ${this.entities?.spools.map(
               (spool) => html`
@@ -81,7 +83,7 @@ export class VectorAmsCard extends LitElement {
               </div>
               `
              )}
-          </div>
+          </div>` : nothing}
         </div>
       </ha-card>
     `;
