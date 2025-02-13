@@ -3,12 +3,13 @@ import { html, LitElement, nothing, PropertyValues } from "lit";
 import styles from "./card.styles";
 
 import { registerCustomCard } from "../../utils/custom-cards";
-import { PRINT_CONTROL_CARD_EDITOR_NAME, PRINT_CONTROL_CARD_NAME } from "./const";
+import { PRINT_CONTROL_CARD_EDITOR_NAME, PRINT_CONTROL_CARD_NAME, PRINT_CONTROL_CARD_NAME_LEGACY } from "./const";
+import { rgbaToInt } from "../../utils/helpers"
 
 registerCustomCard({
   type: PRINT_CONTROL_CARD_NAME,
   name: "Bambu Lab Print Control Card",
-  description: "Card for controlling a Bambu Lab Printer",
+  description: "Control card for Bambu Lab Printers",
 });
 
 interface Entity {
@@ -37,7 +38,7 @@ interface PrintableObject {
 
 @customElement(PRINT_CONTROL_CARD_NAME)
 export class PrintControlCard extends LitElement {
-  
+
   static styles = styles;
 
   // private property
@@ -50,6 +51,8 @@ export class PrintControlCard extends LitElement {
   @state() private _objects = new Map<number, PrintableObject>();
   @state() private _hoveredObject: number = 0;
   @state() private _pickImage: any;
+  @state() private _confirmationDialogVisible: boolean = false;
+  @state() private _confirmationDialogBody: string = "";
 
   // Home assistant state references that are only used in chanedProperties
   @state() private _pickImageState: any;
@@ -58,7 +61,8 @@ export class PrintControlCard extends LitElement {
   private _hiddenCanvas;
   private _hiddenContext;
   private _visibleContext;
- 
+  private _confirmationAction;
+
   constructor() {
     super()
     this._hiddenCanvas = document.createElement('canvas');
@@ -71,10 +75,6 @@ export class PrintControlCard extends LitElement {
   public static async getConfigElement() {
     await import("./print-control-card-editor");
     return document.createElement(PRINT_CONTROL_CARD_EDITOR_NAME);
-  }
-
-  static getStubConfig() {
-    return { entity: "sun.sun" };
   }
 
   setConfig(config) {
@@ -97,17 +97,13 @@ export class PrintControlCard extends LitElement {
     }
   }
 
-  private rgbaToInt(r, g, b, a) {
-    return r | (g << 8) | (b << 16) | (a << 24);
-  }
-
   private _handleCanvasClick(event) {
     const canvas = this.shadowRoot!.getElementById('canvas') as HTMLCanvasElement;
     // The intrinsic width and height of the canvas (512x512)
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     // The CSS width and height of the canvas (which might be different)
-    const canvasStyleWidth = canvas.offsetWidth; 
+    const canvasStyleWidth = canvas.offsetWidth;
     const canvasStyleHeight = canvas.offsetHeight;
     // Calculate the scaling factors
     const scaleX = canvasStyleWidth / canvasWidth;
@@ -126,7 +122,7 @@ export class PrintControlCard extends LitElement {
     const imageData = this._hiddenContext.getImageData(x, y, 1, 1).data;
     const [r, g, b, a] = imageData;
 
-    const key = this.rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
+    const key = rgbaToInt(r, g, b, 0); // For integer comparisons we set the alpha to 0.
     if (key != 0)
     {
       if (!this._objects.get(key)!.skipped) {
@@ -215,23 +211,23 @@ export class PrintControlCard extends LitElement {
     const readData = readImageData.data;
 
     // Overwrite the display image with the starting pick image
-    this._visibleContext.putImageData(readImageData, 0, 0);  
+    this._visibleContext.putImageData(readImageData, 0, 0);
 
     // Read the data into a buffer that we'll write to to modify the pixel colors.
     const writeImageData = this._visibleContext.getImageData(0, 0, WIDTH, HEIGHT);
     const writeData = writeImageData.data;
     const writeDataView = new DataView(writeData.buffer);
-  
-    const red = this.rgbaToInt(255, 0, 0, 255);   // For writes we set alpha to 255 (fully opaque).
-    const green = this.rgbaToInt(0, 255, 0, 255); // For writes we set alpha to 255 (fully opaque).
-    const blue = this.rgbaToInt(0, 0, 255, 255);  // For writes we set alpha to 255 (fully opaque).
+
+    const red = rgbaToInt(255, 0, 0, 255);   // For writes we set alpha to 255 (fully opaque).
+    const green = rgbaToInt(0, 255, 0, 255); // For writes we set alpha to 255 (fully opaque).
+    const blue = rgbaToInt(0, 0, 255, 255);  // For writes we set alpha to 255 (fully opaque).
 
     let lastPixelWasHoveredObject = false
     for (let y = 0; y < HEIGHT; y++) {
       for (let x = 0; x < WIDTH; x++) {
         const i = (y * 4 * HEIGHT) + x * 4;
-        const key = this.rgbaToInt(readData[i], readData[i + 1], readData[i + 2], 0); // For integer comparisons we set the alpha to 0.
-        
+        const key = rgbaToInt(readData[i], readData[i + 1], readData[i + 2], 0); // For integer comparisons we set the alpha to 0.
+
         // If the pixel is not clear we need to change it.
         if (key != 0) {
           // Color the object based on it's to_skip state.
@@ -246,7 +242,7 @@ export class PrintControlCard extends LitElement {
             // Check to see if we need to render the left border if the pixel to the left is not the hovered object.
             if (x > 0) {
               const j = i - 4
-              const left = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const left = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (left != key)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -255,7 +251,7 @@ export class PrintControlCard extends LitElement {
             // And the next pixel out too for a 2 pixel border.
             if (x > 1) {
               const j = i - 4 * 2
-              const left = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const left = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (left != key)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -265,7 +261,7 @@ export class PrintControlCard extends LitElement {
             // Check to see if we need to render the top border if the pixel above is not the hovered object.
             if (y > 0) {
               const j = i - WIDTH * 4
-              const top = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const top = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (top != key)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -274,7 +270,7 @@ export class PrintControlCard extends LitElement {
             // And the next pixel out too for a 2 pixel border.
             if (y > 1) {
               const j = i - WIDTH * 4 * 2
-              const top = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const top = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (top != key)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -284,7 +280,7 @@ export class PrintControlCard extends LitElement {
             // Check to see if pixel to the right is not the hovered object to draw right border.
             if (x < (WIDTH - 1)) {
               const j = i + 4
-              const right = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const right = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (right != this._hoveredObject)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -293,17 +289,17 @@ export class PrintControlCard extends LitElement {
             // And the next pixel out too for a 2 pixel border.
             if (x < (WIDTH - 2)) {
               const j = i + 4 * 2
-              const right = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const right = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (right != this._hoveredObject)
               {
                 writeDataView.setUint32(i, blue, true);
               }
             }
-            
+
             // Check to see if pixel above was the hovered object to draw bottom border.
             if (y < (HEIGHT - 1)) {
               const j = i + WIDTH * 4
-              const below = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const below = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (below != this._hoveredObject)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -312,7 +308,7 @@ export class PrintControlCard extends LitElement {
             // And the next pixel out too for a 2 pixel border.
             if (y < (HEIGHT - 2)) {
               const j = i + WIDTH * 4 * 2
-              const below = this.rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
+              const below = rgbaToInt(readData[j], readData[j+1], readData[j+2], 0);
               if (below != this._hoveredObject)
               {
                 writeDataView.setUint32(i, blue, true);
@@ -324,12 +320,12 @@ export class PrintControlCard extends LitElement {
     }
 
     // Put the modified image data back into the canvas
-    this._visibleContext.putImageData(writeImageData, 0, 0);  
+    this._visibleContext.putImageData(writeImageData, 0, 0);
   }
 
   updated(changedProperties) {
     super.updated(changedProperties);
-    
+
     if (changedProperties.has('_hoveredObject')) {
       this._colorizeCanvas();
     }
@@ -343,27 +339,51 @@ export class PrintControlCard extends LitElement {
     }
 
     if (changedProperties.has('_skippedObjectsState')) {
-      this._populateCheckboxList()
+      this._populateCheckboxList();
     }
+  }
+
+  private _showPauseDialog() {
+    this._confirmationAction = () => { this._clickButton(this._entities?.pause) }
+    this._confirmationDialogBody = "Are you sure you want to pause the print. This may cause quality issues.";
+    this._confirmationDialogVisible = true;
+  }
+
+  private _showStopDialog() {
+    this._confirmationAction = () => { this._clickButton(this._entities?.stop) };
+    this._confirmationDialogBody = "Are you sure you want to stop the print. This cannot be reversed.";
+    this._confirmationDialogVisible = true;
   }
 
   render() {
     return html`
       <ha-card class="card">
         <div class="control-container">
-          <button class="button" @click="${() => this._clickButton(this._entities?.pause)}" ?disabled="${this._isEntityUnavailable(this._entities?.pause)}">
+          <button class="button" @click="${this._showPauseDialog}" ?disabled="${this._isEntityUnavailable(this._entities?.pause)}">
             Pause
           </button>
-          <button class="button" @click="${() => this._clickButton(this._entities?.resume)}" ?disabled="${this._isEntityUnavailable(this._entities?.resume)}">
+          <button class="button" @click="${() => { this._clickButton(this._entities?.resume) }}" ?disabled="${this._isEntityUnavailable(this._entities?.resume)}">
             Resume
           </button>
-          <button class="button" @click="${() => this._clickButton(this._entities?.stop)}" ?disabled="${this._isEntityUnavailable(this._entities?.stop)}">
+          <button class="button" @click="${this._showStopDialog}" ?disabled="${this._isEntityUnavailable(this._entities?.stop)}">
             Stop
           </button>
           <button class="button" @click="${this._showPopup}" ?disabled="${this._isEntityUnavailable(this._entities?.stop)}">
             Skip
           </button>
         </div>
+        ${this._confirmationDialogVisible ? html`
+          <ha-dialog id="confirmation-popup" open="true" heading="title">
+            <ha-dialog-header slot="heading">
+              <div slot="title">Please confirm</div>
+            </ha-dialog-header>
+            <div class="content">
+              ${this._confirmationDialogBody}
+            </div>
+            <mwc-button slot="primaryAction" @click="${() => { this._confirmationAction(); this._confirmationDialogVisible = false; }}">Confirm</mwc-button>
+            <mwc-button slot="secondaryAction" @click="${() => { this._confirmationDialogVisible = false; }}">Cancel</mwc-button>
+          </ha-dialog>
+        ` : ``}
         <div class="popup-container" style="display: ${this._popupVisible ? 'block' : 'none'};">
           <div class="popup-background" @click="${this._cancelPopup}"></div>
           <div class="popup">
@@ -425,7 +445,7 @@ export class PrintControlCard extends LitElement {
     }
     return true;  // No items meet the criteria
   }
-  
+
   private _callSkipObjectsService() {
     const list = Array.from(this._objects.keys()).filter((key) => this._objects.get(key)!.to_skip).map((key) => key).join(',');
     const data = { "device_id": [this._device_id], "objects": list }
@@ -533,4 +553,8 @@ export class PrintControlCard extends LitElement {
     this._pickImageState = this._states[result.pickImage!.entity_id].state
     this._skippedObjectsState = this._states[result.skippedObjects!.entity_id].state
   }
+}
+
+@customElement(PRINT_CONTROL_CARD_NAME_LEGACY)
+export class PrintControlCardLegacy extends PrintControlCard {
 }
