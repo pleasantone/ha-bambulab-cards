@@ -67,7 +67,7 @@ export class InfoBar extends LitElement {
           ${this.humidity
             ? html` <div class="info">
                 <span><ha-icon icon="mdi:water" style="color: ${this.getHumidityColor()}" /></span>
-                <span>${this.customHumidity ? this.customHumidity : this.humidity}</span>
+                <span>${this.customHumidity ? (this.customHumidity + "%") : this.humidity}</span>
               </div>`
             : nothing}
           ${this.temperature
