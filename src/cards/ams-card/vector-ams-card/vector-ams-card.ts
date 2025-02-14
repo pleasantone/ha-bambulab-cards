@@ -54,7 +54,7 @@ export class VectorAmsCard extends LitElement {
             : nothing}
           <div class="v-ams-container">
             ${this.entities?.spools.map(
-              (spool) => html`
+              (spool: { entity_id: string | number; }) => html`
                 <div
                   class="v-spool-holder"
                   style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
@@ -77,7 +77,7 @@ export class VectorAmsCard extends LitElement {
           ${this.showType ? html`
           <div class="v-spool-info-container">
              ${this.entities?.spools.map(
-              (spool) => html`
+              (spool: { entity_id: string | number; }) => html`
               <div class="v-spool-info-wrapper">
                 <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.name}</div>
               </div>
