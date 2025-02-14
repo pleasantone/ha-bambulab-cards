@@ -13,18 +13,20 @@ export class VectorAmsCard extends LitElement {
   @property() public customHumidity;
   @property() public customTemperature;
 
-
   static styles = styles;
 
   temperature() {
     if (this?.entities?.temperature) {
-      if(this.customTemperature) {
+      if (this.customTemperature) {
         return {
+          type: "custom",
           value: this.states[this.customTemperature]?.state,
-          unit_of_measurement:  this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
+          unit_of_measurement:
+            this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
         };
       }
       return {
+        type: "default",
         value: this.states[this.entities.temperature.entity_id]?.state,
         unit_of_measurement:
           this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
@@ -35,10 +37,16 @@ export class VectorAmsCard extends LitElement {
 
   humidity() {
     if (this?.entities?.humidity) {
-      if(this.customHumidity) {
-        return this.states[this.customHumidity]?.state;
+      if (this.customHumidity) {
+        return {
+          type: "custom",
+          value: this.states[this.customHumidity]?.state,
+        };
       }
-      return this.states[this.entities.humidity]?.state;
+      return {
+        type: "default",
+        value: this.states[this.entities.humidity.entity_id]?.state,
+      };
     }
     return nothing;
   }
@@ -48,10 +56,12 @@ export class VectorAmsCard extends LitElement {
     return false;
   }
 
-  remainingModifier(remain){{
-    if(this.entities.type == "AMS Lite") return 100
-    return remain
-  }}
+  remainingModifier(remain) {
+    {
+      if (this.entities.type == "AMS Lite") return 100;
+      return remain;
+    }
+  }
 
   render() {
     return html`
@@ -60,15 +70,13 @@ export class VectorAmsCard extends LitElement {
           ${this.showInfoBar
             ? html` <info-bar
                 subtitle="${this.subtitle}"
-                customHumidity="${this.humidity()}"
-                customTemperature="${this.temperature()}"
-                humidity="${this.humidity()}"
+                .humidity="${this.humidity()}"
                 .temperature="${this.temperature()}"
               ></info-bar>`
             : nothing}
           <div class="v-ams-container">
             ${this.entities?.spools.map(
-              (spool: { entity_id: string | number; }) => html`
+              (spool: { entity_id: string | number }) => html`
                 <div
                   class="v-spool-holder"
                   style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
@@ -79,25 +87,29 @@ export class VectorAmsCard extends LitElement {
                     ? html` <bl-spool
                         ?active=${this.isActive(this.states[spool.entity_id]?.attributes)}
                         .color="${this.states[spool.entity_id]?.attributes.color}"
-                        .remaining="${this.remainingModifier(this.states[spool.entity_id]?.attributes.remain)}"
+                        .remaining="${this.remainingModifier(
+                          this.states[spool.entity_id]?.attributes.remain
+                        )}"
                         .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
                       ></bl-spool>`
                     : nothing}
-                 
                 </div>
               `
             )}
           </div>
-          ${this.showType ? html`
-          <div class="v-spool-info-container">
-             ${this.entities?.spools.map(
-              (spool: { entity_id: string | number; }) => html`
-              <div class="v-spool-info-wrapper">
-                <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.name}</div>
-              </div>
-              `
-             )}
-          </div>` : nothing}
+          ${this.showType
+            ? html` <div class="v-spool-info-container">
+                ${this.entities?.spools.map(
+                  (spool: { entity_id: string | number }) => html`
+                    <div class="v-spool-info-wrapper">
+                      <div class="v-spool-info">
+                        ${this.states[spool.entity_id]?.attributes.name}
+                      </div>
+                    </div>
+                  `
+                )}
+              </div>`
+            : nothing}
         </div>
       </ha-card>
     `;
