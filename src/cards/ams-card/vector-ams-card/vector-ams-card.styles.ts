@@ -39,6 +39,7 @@ export default css`
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-evenly;
+    margin-top: 7px;
   }
 
   .v-spool-holder {
@@ -55,15 +56,22 @@ export default css`
     );
   }
 
+  .v-spool-info-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+  }
+
+  .v-spool-info-wrapper {
+       width: 20%;
+       margin: 7px;
+
+  }
+
   .v-spool-info {
-    position: absolute;
-    z-index: 2;
     background: #444444;
     padding: 0px 10px;
     border-radius: 0.5em;
-    bottom: -20%;
-    left: 50%;
-    transform: translateX(-50%);
     white-space: nowrap;
     color: white;
     font-size: small;
@@ -71,5 +79,9 @@ export default css`
     display: flex;
     justify-content: center;
     align-items: center;
+    text-wrap: auto;
+    text-align: center;
+    line-height: 1em;
+    overflow: ellipsis;
   }
 `;

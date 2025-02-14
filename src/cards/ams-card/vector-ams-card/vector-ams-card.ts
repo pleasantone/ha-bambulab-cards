@@ -9,11 +9,21 @@ export class VectorAmsCard extends LitElement {
   @property() public showInfoBar;
   @property({ type: Object }) public entities;
   @property({ type: Object }) public states;
+  @property() public showType;
+  @property() public customHumidity;
+  @property() public customTemperature;
+
 
   static styles = styles;
 
   temperature() {
     if (this?.entities?.temperature) {
+      if(this.customTemperature) {
+        return {
+          value: this.states[this.customTemperature]?.state,
+          unit_of_measurement:  this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
+        };
+      }
       return {
         value: this.states[this.entities.temperature.entity_id]?.state,
         unit_of_measurement:
@@ -25,7 +35,10 @@ export class VectorAmsCard extends LitElement {
 
   humidity() {
     if (this?.entities?.humidity) {
-      return this.states[this.entities.humidity.entity_id]?.state;
+      if(this.customHumidity) {
+        return this.states[this.customHumidity]?.state;
+      }
+      return this.states[this.entities.humidity]?.state;
     }
     return nothing;
   }
@@ -47,13 +60,15 @@ export class VectorAmsCard extends LitElement {
           ${this.showInfoBar
             ? html` <info-bar
                 subtitle="${this.subtitle}"
+                customHumidity="${this.humidity()}"
+                customTemperature="${this.temperature()}"
                 humidity="${this.humidity()}"
                 .temperature="${this.temperature()}"
               ></info-bar>`
             : nothing}
           <div class="v-ams-container">
             ${this.entities?.spools.map(
-              (spool) => html`
+              (spool: { entity_id: string | number; }) => html`
                 <div
                   class="v-spool-holder"
                   style="border-color: ${this.isActive(this.states[spool.entity_id]?.attributes)
@@ -68,11 +83,21 @@ export class VectorAmsCard extends LitElement {
                         .tag_uid="${this.states[spool.entity_id]?.attributes.tag_uid}"
                       ></bl-spool>`
                     : nothing}
-                  <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.type}</div>
+                 
                 </div>
               `
             )}
           </div>
+          ${this.showType ? html`
+          <div class="v-spool-info-container">
+             ${this.entities?.spools.map(
+              (spool: { entity_id: string | number; }) => html`
+              <div class="v-spool-info-wrapper">
+                <div class="v-spool-info">${this.states[spool.entity_id]?.attributes.name}</div>
+              </div>
+              `
+             )}
+          </div>` : nothing}
         </div>
       </ha-card>
     `;
