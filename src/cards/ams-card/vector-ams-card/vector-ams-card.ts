@@ -16,15 +16,15 @@ export class VectorAmsCard extends LitElement {
   static styles = styles;
 
   temperature() {
+    if (this.customTemperature) {
+      return {
+        type: "custom",
+        value: this.states[this.customTemperature]?.state,
+        unit_of_measurement:
+          this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
+      };
+    }
     if (this?.entities?.temperature) {
-      if (this.customTemperature) {
-        return {
-          type: "custom",
-          value: this.states[this.customTemperature]?.state,
-          unit_of_measurement:
-            this.states[this.entities.temperature.entity_id]?.attributes.unit_of_measurement,
-        };
-      }
       return {
         type: "default",
         value: this.states[this.entities.temperature.entity_id]?.state,
@@ -36,13 +36,13 @@ export class VectorAmsCard extends LitElement {
   }
 
   humidity() {
+    if (this.customHumidity) {
+      return {
+        type: "custom",
+        value: this.states[this.customHumidity]?.state,
+      };
+    }
     if (this?.entities?.humidity) {
-      if (this.customHumidity) {
-        return {
-          type: "custom",
-          value: this.states[this.customHumidity]?.state,
-        };
-      }
       return {
         type: "default",
         value: this.states[this.entities.humidity.entity_id]?.state,
