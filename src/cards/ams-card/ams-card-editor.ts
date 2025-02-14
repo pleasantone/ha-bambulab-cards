@@ -19,7 +19,7 @@ export class AmsCardEditor extends LitElement {
     this._config = config;
   }
 
-  private _schema = memoizeOne((showInfoBar: boolean) => [
+  private _schema = memoizeOne((showInfoBar: boolean, style: string) => [
     { name: "show_info_bar", label: "Show Info Bar", selector: { boolean: true } },
     ...(showInfoBar
       ? [
@@ -28,9 +28,21 @@ export class AmsCardEditor extends LitElement {
             label: "Subtitle",
             selector: { text: {} },
           },
+          {
+            name: "custom_humidity",
+            label: "Custom Humidity Sensor",
+            selector: { entity: { domain: "sensor" }},
+          },
+          {
+            name: "custom_temperature",
+            label: "Custom Temperature Sensor",
+            selector: { entity: { domain: "sensor" } },
+          }
         ]
       : ""),
+      ...(style === "vector" ? [
       { name: "show_type", label: "Show Filament Types", selector: { boolean: true } }, 
+      ] : ""),
       {
       name: "ams",
       label: "AMS",
@@ -50,10 +62,10 @@ export class AmsCardEditor extends LitElement {
     },
   ]); 
 
-  
+
 
   render() {
-    const schema = this._schema(this._config.show_info_bar);
+    const schema = this._schema(this._config.show_info_bar, this._config.style);
 
     return html`
       <div>
@@ -79,3 +91,4 @@ export class AmsCardEditor extends LitElement {
     this.dispatchEvent(event);
   }
 }
+ 
