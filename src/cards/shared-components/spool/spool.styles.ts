@@ -7,10 +7,23 @@ export default css`
     box-sizing: border-box;
   }
 
-  .v-spool {
+  .ha-bambulab-spool-container {
+    padding: min(15%, 30px) 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    box-sizing: border-box;
+    border: 2px solid #5a5a5a;
+    border-radius: 3px;
+  }
+
+  .ha-bambulab-spool-side {
     background: #3d3d3d;
     width: 15%;
     height: 100%;
+    max-width: 30px;
   }
 
   .v-spool-container {
@@ -141,5 +154,50 @@ export default css`
     80% {
       transform: skew(0deg, 0deg);
     }
+  }
+
+  .ha-bambulab-spool-card-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+
+  .ha-bambulab-spool-card-holder {
+    border: 7px solid #808080;
+    background: linear-gradient(#959595, #626262, #959595);
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0.6em;
+    display: flex;
+    position: relative;
+    flex: 1;
+    min-height: calc(112px - 7px);
+  }
+
+  .ha-bambulab-spool-info-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ha-bambulab-spool-info-wrapper {
+    margin-top: 7px;
+  }
+
+  .ha-bambulab-spool-info {
+    background: #444444;
+    padding: 0px 10px;
+    border-radius: 0.5em;
+    white-space: nowrap;
+    color: white;
+    font-size: small;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-wrap: auto;
+    text-align: center;
+    line-height: 1em;
+    overflow: ellipsis;
   }
 `;

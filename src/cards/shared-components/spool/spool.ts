@@ -1,17 +1,16 @@
 import { customElement, property } from "lit/decorators.js";
 import { html, LitElement, nothing } from "lit";
 import styles from "./spool.styles";
-import { getContrastingTextColor } from "../../../../utils/helpers";
 
-@customElement("bl-spool")
+@customElement("ha-bambulab-spool")
 export class Spool extends LitElement {
   @property({ type: Boolean }) public active: boolean = false;
   @property({ type: String }) public color;
   @property({ type: String }) public tag_uid;
+  @property({ type: String }) public name;
   @property({ type: Number }) public remaining;
-  @property({ type: Number }) private maxSpoolHeight: number = 0;
-  @property({ type: Number }) private minSpoolHeight: number = 0;
-  @property({ type: Number }) private remainHeight: number = 0;
+  @property({ type: Boolean }) public show_type: boolean = false;
+  @property({ type: Number }) private remainHeight: number = 95;
   @property({ type: Number }) private resizeObserver: ResizeObserver | null = null;
 
   static styles = styles;
@@ -45,31 +44,45 @@ export class Spool extends LitElement {
 
   render() {
     return html`
-      <div class="v-spool-container">
-        <div class="v-spool"></div>
+      <div class="ha-bambulab-spool-card-container">
         <div
-          class="string-roll-container"
-          style="animation: ${this.active ? "wiggle 3s linear infinite" : ""}"
+          class="ha-bambulab-spool-card-holder"
+          style="border-color: ${this.active ? this.color : "#808080"}"
         >
-          <div
-            class="v-string-roll"
-            id="v-string-roll"
-            style="background: ${this.color}; height: ${this.remainHeight.toFixed(2)}%"
-          >
-            ${this.active ? html`<div class="v-reflection"></div>` : nothing}
-            ${this.getRemainingValue().type == "unknown" ||
-            this.getRemainingValue().type == "generic"
-              ? ""
-              : html` <div class="remaining-percent"><p>${this.remaining}%</p></div> `}
+          <div class="ha-bambulab-spool-container">
+            <div class="ha-bambulab-spool-side"></div>
+            <div
+              class="string-roll-container"
+              style="${this.active ? "animation: wiggle 3s linear infinite" : nothing}"
+            >
+              <div
+                class="v-string-roll"
+                id="v-string-roll"
+                style="background: ${this.color}; height: ${this.remainHeight.toFixed(2)}%"
+              >
+                ${this.active ? html`<div class="v-reflection"></div>` : nothing}
+                ${this.getRemainingValue().type == "unknown" ||
+                this.getRemainingValue().type == "generic"
+                  ? ""
+                  : html` <div class="remaining-percent"><p>${this.remaining}%</p></div> `}
+              </div>
+            </div>
+            <div class="ha-bambulab-spool-side"></div>
           </div>
         </div>
-        <div class="v-spool"></div>
+        ${this.show_type
+          ? html` <div class="ha-bambulab-spool-info-container">
+              <div class="ha-bambulab-spool-info-wrapper">
+                <div class="ha-bambulab-spool-info">${this.name}</div>
+              </div>
+            </div>`
+          : nothing}
       </div>
     `;
   }
 
   updateLayers() {
-    // Query the #string-roll element inside this component’s shadow DOM
+    // Query the #string-roll element inside this component's shadow DOM
     const stringRoll = (this.renderRoot as ShadowRoot).getElementById("v-string-roll");
     if (!stringRoll) return;
 
@@ -95,7 +108,6 @@ export class Spool extends LitElement {
       stringRoll.appendChild(layer);
     }
   }
-  
 
   getRemainingValue() {
     if (this.isAllZeros(this.tag_uid)) {
@@ -111,13 +123,12 @@ export class Spool extends LitElement {
   }
 
   calculateHeights() {
-    // If not a Bambu Sppol or remaining is less than 0
-    // Less than 0 can represent no filament estimation enabled or bugged MQTT needing a printer restart
-    if (
-      this.getRemainingValue().type === "generic" ||
-      this.getRemainingValue().type === "unknown"
-    ) {
-      this.remainHeight = 95;
+    const maxHeightPercentage = 95;
+    const minHeightPercentage = 12;
+
+    // If not a Bambu Spool or remaining is less than 0
+    if (this.isAllZeros(this.tag_uid) || this.remaining < 0) {
+      this.remainHeight = maxHeightPercentage;
     } else {
       // Get the container's height
       const container = this.renderRoot.querySelector(
@@ -125,21 +136,23 @@ export class Spool extends LitElement {
       ) as HTMLElement | null;
       const containerHeight = container?.offsetHeight || 0;
 
-      // Calculate max spool height (95% of container height)
-      this.maxSpoolHeight = containerHeight * 0.95;
-
-      // Calculate min spool height (12% of max spool height)
-      this.minSpoolHeight = this.maxSpoolHeight * 0.12;
+      // Calculate heights in pixels
+      const maxHeightPx = containerHeight * (maxHeightPercentage / 100);
+      const minHeightPx = containerHeight * (minHeightPercentage / 100);
 
       // Calculate remain height based on the remain percentage
-      const remainPercentage = Math.min(Math.max(this.remaining, 0), 100); // Clamp remain to [0, 100]
-      this.remainHeight =
-        this.minSpoolHeight +
-        (this.maxSpoolHeight - this.minSpoolHeight) * (remainPercentage / 100);
+      const remainPercentage = Math.min(Math.max(this.remaining, 0), 100);
+      this.remainHeight = minHeightPx + (maxHeightPx - minHeightPx) * (remainPercentage / 100);
 
-      // Ensure remainHeight is within bounds
-      this.remainHeight = Math.min(this.remainHeight, this.maxSpoolHeight);
-      this.requestUpdate();
+      // Convert back to percentage of container
+      this.remainHeight = (this.remainHeight / containerHeight) * 100;
     }
+
+    // Ensure remainHeight is always a number and doesn't exceed maxHeightPercentage
+    this.remainHeight = Math.min(
+      Number(this.remainHeight) || maxHeightPercentage,
+      maxHeightPercentage
+    );
+    this.requestUpdate();
   }
 }
