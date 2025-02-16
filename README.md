@@ -10,15 +10,18 @@ Home Assistant Custom Cards for Bambu Lab printers.
 
 If you already have the [ha-bambulab]() integration installed, you **DO NOT** need to use this repo, as they are already included with the integration
 
+Join us on [Discord](https://discord.gg/rsUHAW3DKz)
+
+## Docs
+
 Full documentation for the integration can [be found here](https://docs.page/greghesp/ha-bambulab)
 
-Join us on [Discord](https://discord.gg/rsUHAW3DKz)
 
 ## Contribution
 
 [Want to contribute to ha-bambulab?](https://docs.page/greghesp/ha-bambulab/misc/contributing)
 
-If you feel these custom cards are valuable and want to support them in other ways, you can [buy me a coffee](https://Ko-fi.com/greghesp).
+If you feel these custom cards are valuable and want to support them in other ways, you can [buy Greg a coffee](https://Ko-fi.com/greghesp).
 
 ## Setup
 
