@@ -8,7 +8,7 @@
 
 Home Assistant Custom Cards for Bambu Lab printers.
 
-If you already have the [ha-bambulab]() integration installed, you **DO NOT** need to use this repo, as they are already included with the integration
+If you already have the [ha-bambulab](https://github.com/greghesp/ha-bambulab) integration installed, you **DO NOT** need to use this repo, as they are already included with the integration
 
 Join us on [Discord](https://discord.gg/rsUHAW3DKz)
 
