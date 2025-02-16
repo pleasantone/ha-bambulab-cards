@@ -112,13 +112,10 @@ export class PrintControlCard extends LitElement {
         })
       }
 
-      helpers.asyncFilterBambuDevices(hass, this._device_id, ENTITYLIST).then(
-        result => {
-          this._entityList = result;
-          // Keep a reference to the skippedObjects state for Lit reactivity to trigger off when it changes.
-          this._pickImageState = this._states[result['pick_image'].entity_id].state;
-          this._skippedObjectsState = this._states[result['skipped_objects'].entity_id].state;
-        })
+      this._entityList = helpers.getBambuDeviceEntities(hass, this._device_id, ENTITYLIST);
+      // Keep a reference to the skippedObjects state for Lit reactivity to trigger off when it changes.
+      this._pickImageState = this._states[this._entityList['pick_image'].entity_id].state;
+      this._skippedObjectsState = this._states[this._entityList['skipped_objects'].entity_id].state;
     }
   }
 
@@ -182,32 +179,23 @@ export class PrintControlCard extends LitElement {
   }
 
   private _getPickImageUrl() {
-    if (this._entityList['pick_image']) {
-      const entity = this._entityList['pick_image'];
-      const timestamp = this._states[entity.entity_id].state;
-      const accessToken = this._states[entity.entity_id].attributes?.access_token
-      const imageUrl = `/api/image_proxy/${entity.entity_id}?token=${accessToken}&time=${timestamp}`;
-      return imageUrl;
-    }
-    return '';
+    const entity = this._entityList['pick_image'];
+    const timestamp = this._states[entity.entity_id].state;
+    const accessToken = this._states[entity.entity_id].attributes?.access_token
+    const imageUrl = `/api/image_proxy/${entity.entity_id}?token=${accessToken}&time=${timestamp}`;
+    return imageUrl;
   }
 
   private _getSkippedObjects() {
-    if (this._entityList['skipped_objects']) {
-      const entity = this._entityList['skipped_objects'];
-      const value = this._states[entity.entity_id].attributes['objects'];
-      return value
-    }
-    return null;
+    const entity = this._entityList['skipped_objects'];
+    const value = this._states[entity.entity_id].attributes['objects'];
+    return value
   }
 
   private _getPrintableObjects() {
-    if (this._entityList['printable_objects']) {
-      const entity = this._entityList['printable_objects'];
-      const value = this._states[entity.entity_id].attributes['objects'];
-      return value
-    }
-    return null;
+    const entity = this._entityList['printable_objects'];
+    const value = this._states[entity.entity_id].attributes['objects'];
+    return value
   }
 
   private _isEntityUnavailable(entity: helpers.Entity): boolean {
