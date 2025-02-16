@@ -9,4 +9,5 @@ import "./cards/spool-card/spool-card";
 console.info("🐼 Loaded: Spool Card");
 // import "./cards/example-card/example-card";
 
-console.info(`%c🐼 Bambu Lab 🐼 - ${version}`, "color: #ef5350; font-weight: 700;");
+console.info(`%c🐼 Bambu Lab 🐼 %c ${version}`, 'color: #ffffff; background:rgb(109, 109, 109); padding: 5px; font-size: 1.2em;','color:rgb(255, 255, 255); background: #22A041; font-size: 1.2em; padding: 5px')
+
