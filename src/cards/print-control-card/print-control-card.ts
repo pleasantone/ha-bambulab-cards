@@ -43,7 +43,6 @@ export class PrintControlCard extends LitElement {
 
   @state() private _states;
   @state() private _device_id: any;
-  @state() private _entities: any;
   @state() private _popupVisible: boolean = false;
   @state() private _objects = new Map<number, PrintableObject>();
   @state() private _hoveredObject: number = 0;
@@ -114,8 +113,8 @@ export class PrintControlCard extends LitElement {
 
       this._entityList = helpers.getBambuDeviceEntities(hass, this._device_id, ENTITYLIST);
       // Keep a reference to the skippedObjects state for Lit reactivity to trigger off when it changes.
-      this._pickImageState = this._states[this._entityList['pick_image'].entity_id].state;
-      this._skippedObjectsState = this._states[this._entityList['skipped_objects'].entity_id].state;
+      this._pickImageState = this._states[this._entityList['pick_image']?.entity_id]?.state;
+      this._skippedObjectsState = this._states[this._entityList['skipped_objects']?.entity_id]?.state;
     }
   }
 
@@ -378,7 +377,8 @@ export class PrintControlCard extends LitElement {
 
   private _showSkipButton() {
     const countOfPrintableObjects = Object.keys(this._getPrintableObjects()).length;
-    if ((countOfPrintableObjects < 2) ||
+    if ((this._pickImageState == undefined) ||
+        (countOfPrintableObjects < 2) ||
         (countOfPrintableObjects > 64))
     {
       return false;      
